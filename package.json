@@ -1,6 +1,6 @@
 {
   "name": "@ojesusmp/explica",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude Code skill that generates a self-contained graphical HTML+CSS guide explaining the current state of any prompt, project, program, or decision-point at an 18-year-old reading level.",
   "keywords": [
     "claude",
@@ -11,7 +11,8 @@
     "html",
     "report",
     "project-status",
-    "explica"
+    "explica",
+    "truepointagents"
   ],
   "homepage": "https://github.com/ojesusmp/TrueExplica#readme",
   "bugs": {
@@ -19,10 +20,15 @@
   },
   "license": "MIT",
   "author": {
-    "name": "Orlando Mendoza-Pajaro",
-    "email": "ojesusmp@gmail.com",
+    "name": "Orlando Molina",
     "url": "https://github.com/ojesusmp"
   },
+  "contributors": [
+    {
+      "name": "TruePointAgents",
+      "url": "https://github.com/ojesusmp"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ojesusmp/TrueExplica.git"

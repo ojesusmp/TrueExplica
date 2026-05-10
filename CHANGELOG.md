@@ -4,6 +4,17 @@ All notable changes to the `explica` skill are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-05-10
+
+### Changed
+- Rewrote `README.md` for clarity, depth, and platform-neutral install instructions; removed every local filesystem reference.
+- Updated `LICENSE` and `package.json` author attribution to **Orlando Molina** under **TruePointAgents**.
+- Added repository-standard documentation: `CONTRIBUTING.md`, `SECURITY.md`, `CODE_OF_CONDUCT.md`, and GitHub issue + pull-request templates under `.github/`.
+
+### Notes
+- No functional change to the skill itself, the schema, the template, the trigger phrases, or the generated HTML.
+- Existing installs of `1.0.0` continue to work without changes.
+
 ## [1.0.0] - 2026-05-10
 
 ### Added
@@ -16,7 +27,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 - Two soft-suggestion phrases that prompt the user instead of auto-firing: `explain this project`, `graphical guide`.
 - Validation checklist embedded in `SKILL.md` (file size, section anchors, zero external references, required `<style>` and `<svg>` and media queries, filename format).
 - MIT licensed.
-- npm install via `npm install -g @ojesusmp/explica` with postinstall copy to `~/.claude/skills/explica/`.
+- npm install via `npm install -g @ojesusmp/explica` with postinstall copy to the user's Claude Code skills directory.
 
 ### Known limitations
 - No JavaScript interactivity in generated HTML (intentional for offline portability).
@@ -26,4 +37,5 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 ### Planned for v1.1
 - Optional Node render script at `bin/render.mjs` (~150 LOC, zero deps) for deterministic HTML generation outside an assistant turn.
 
+[1.0.1]: https://github.com/ojesusmp/TrueExplica/releases/tag/v1.0.1
 [1.0.0]: https://github.com/ojesusmp/TrueExplica/releases/tag/v1.0.0

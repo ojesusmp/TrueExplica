@@ -1,0 +1,29 @@
+{
+  "name": "trueexplica",
+  "owner": {
+    "name": "Orlando Molina",
+    "email": "ojesusmp@gmail.com",
+    "url": "https://github.com/ojesusmp"
+  },
+  "metadata": {
+    "description": "TruePointAgents marketplace hosting the explica Claude Code skill.",
+    "version": "1.0.1"
+  },
+  "plugins": [
+    {
+      "name": "explica",
+      "source": ".",
+      "description": "Self-contained graphical HTML+CSS guide explaining the current state of any prompt, project, program, or decision-point at an 18-year-old reading level. Output is one HTML file with inline CSS and SVG, no external dependencies, no JavaScript.",
+      "version": "1.0.1",
+      "category": "documentation",
+      "tags": ["documentation", "status-report", "html", "visual", "project-status"],
+      "license": "MIT",
+      "homepage": "https://github.com/ojesusmp/TrueExplica",
+      "repository": "https://github.com/ojesusmp/TrueExplica",
+      "author": {
+        "name": "Orlando Molina",
+        "url": "https://github.com/ojesusmp"
+      }
+    }
+  ]
+}
