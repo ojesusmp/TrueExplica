@@ -1,0 +1,1099 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <style>
+    /* ── CSS variables: light mode defaults ── */
+    :root {
+      --bg: #ffffff;
+      --fg: #1a1a1a;
+      --muted: #6b7280;
+      --accent: #2563eb;
+      --border: #e5e7eb;
+      --card-bg: #f9fafb;
+
+      --pill-done-bg: #dcfce7;
+      --pill-done-fg: #14532d;
+      --pill-inprogress-bg: #dbeafe;
+      --pill-inprogress-fg: #1e3a8a;
+      --pill-waiting-bg: #fef9c3;
+      --pill-waiting-fg: #713f12;
+      --pill-blocked-bg: #fee2e2;
+      --pill-blocked-fg: #7f1d1d;
+
+      --pill-inferred-bg: #f59e0b;
+      --pill-inferred-fg: #1f1300;
+    }
+
+    /* ── Dark mode overrides ── */
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a;
+        --fg: #e2e8f0;
+        --muted: #94a3b8;
+        --accent: #60a5fa;
+        --border: #1e293b;
+        --card-bg: #1e293b;
+
+        --pill-done-bg: #14532d;
+        --pill-done-fg: #bbf7d0;
+        --pill-inprogress-bg: #1e3a8a;
+        --pill-inprogress-fg: #bfdbfe;
+        --pill-waiting-bg: #713f12;
+        --pill-waiting-fg: #fef08a;
+        --pill-blocked-bg: #7f1d1d;
+        --pill-blocked-fg: #fecaca;
+
+        --pill-inferred-bg: #b45309;
+        --pill-inferred-fg: #fef3c7;
+      }
+    }
+
+    /* ── Print styles ── */
+    @media print {
+      nav.toc,
+      .no-print {
+        display: none !important;
+      }
+      body {
+        color: #000 !important;
+        background: #fff !important;
+        font-size: 11pt;
+        line-height: 1.4;
+      }
+      a {
+        color: #000 !important;
+        text-decoration: none;
+      }
+      .card {
+        border: 1px solid #ccc !important;
+        background: #fff !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+      }
+      .pill {
+        border: 1px solid #999 !important;
+        background: #f0f0f0 !important;
+        color: #000 !important;
+      }
+      .progress {
+        border: 1px solid #999;
+      }
+      .progress__fill {
+        background: #555 !important;
+      }
+      h1, h2, h3 {
+        page-break-after: avoid;
+      }
+      section {
+        page-break-inside: avoid;
+      }
+      footer {
+        page-break-before: always;
+      }
+    }
+
+    /* ── Reset & base ── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      color: var(--fg);
+      background: var(--bg);
+      min-height: 100vh;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 0 1.5rem;
+      margin-bottom: 0;
+    }
+
+    header .container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--fg);
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── TOC Nav ── */
+    nav.toc {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav.toc .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 1rem;
+      align-items: center;
+    }
+
+    nav.toc a {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    nav.toc a:hover {
+      background: var(--border);
+    }
+
+    /* ── Main content ── */
+    main {
+      padding: 2rem 0 3rem;
+    }
+
+    main .container > section {
+      margin-bottom: 3rem;
+    }
+
+    /* ── Section header ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-header h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--fg);
+    }
+
+    .section-header svg {
+      width: 1.4rem;
+      height: 1.4rem;
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: var(--fg);
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── Pills (status badges) ── */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .pill svg {
+      width: 0.9rem;
+      height: 0.9rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
+    }
+
+    .pill--done {
+      background: var(--pill-done-bg);
+      color: var(--pill-done-fg);
+    }
+
+    .pill--in-progress {
+      background: var(--pill-inprogress-bg);
+      color: var(--pill-inprogress-fg);
+    }
+
+    .pill--waiting {
+      background: var(--pill-waiting-bg);
+      color: var(--pill-waiting-fg);
+    }
+
+    .pill--blocked {
+      background: var(--pill-blocked-bg);
+      color: var(--pill-blocked-fg);
+    }
+
+    .pill--inferred {
+      background: #f59e0b;
+      color: #1f1300;
+    }
+
+    /* ── Progress bar ── */
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: var(--border);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin: 0.5rem 0;
+    }
+
+    .progress__fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 9999px;
+      transition: width 0.3s ease;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0.55rem;
+      top: 0.6rem;
+      bottom: 0.6rem;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline__item {
+      position: relative;
+      padding: 0.75rem 0 0.75rem 1rem;
+    }
+
+    .timeline__item::before {
+      content: '';
+      position: absolute;
+      left: -1.45rem;
+      top: 1rem;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 2px solid var(--bg);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    .timeline__item.done::before {
+      background: var(--pill-done-fg);
+      box-shadow: 0 0 0 2px var(--pill-done-fg);
+    }
+
+    .timeline__item.waiting::before {
+      background: var(--pill-waiting-fg);
+      box-shadow: 0 0 0 2px var(--pill-waiting-fg);
+    }
+
+    .timeline__item.blocked::before {
+      background: var(--pill-blocked-fg);
+      box-shadow: 0 0 0 2px var(--pill-blocked-fg);
+    }
+
+    .timeline__item h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 0.2rem;
+    }
+
+    .timeline__item p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .timeline__item .pill {
+      margin-top: 0.35rem;
+    }
+
+    /* ── Decision matrix table ── */
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+
+    .matrix caption {
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 0.5rem 0;
+      color: var(--fg);
+    }
+
+    .matrix th {
+      background: var(--card-bg);
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.6rem 0.75rem;
+      text-align: left;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .matrix td {
+      padding: 0.65rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--fg);
+      vertical-align: top;
+    }
+
+    .matrix tr:last-child td {
+      border-bottom: none;
+    }
+
+    .matrix tr:hover td {
+      background: var(--card-bg);
+    }
+
+    /* ── Glossary ── */
+    .glossary dl {
+      display: grid;
+      grid-template-columns: minmax(10rem, 22%) 1fr;
+      gap: 0;
+    }
+
+    .glossary dt {
+      font-weight: 600;
+      color: var(--fg);
+      font-size: 0.9rem;
+      padding: 0.6rem 1rem 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      align-self: start;
+    }
+
+    .glossary dd {
+      color: var(--muted);
+      font-size: 0.9rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      margin: 0;
+    }
+
+    .glossary dl dt:last-of-type,
+    .glossary dl dd:last-of-type {
+      border-bottom: none;
+    }
+
+    /* ── Lists ── */
+    .item-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .item-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .item-list li .pill {
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .item-list li .item-content {
+      flex: 1;
+    }
+
+    .item-list li .item-title {
+      font-weight: 600;
+      color: var(--fg);
+      font-size: 0.95rem;
+    }
+
+    .item-list li .item-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    /* ── Next steps ordered list ── */
+    .next-steps-list {
+      counter-reset: step-counter;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .next-steps-list li {
+      counter-increment: step-counter;
+      display: grid;
+      grid-template-columns: 2rem 1fr;
+      gap: 0.75rem;
+      align-items: start;
+    }
+
+    .next-steps-list li::before {
+      content: counter(step-counter);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2rem;
+      height: 2rem;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .next-steps-list .step-content {
+      padding-top: 0.2rem;
+    }
+
+    .next-steps-list .step-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--fg);
+    }
+
+    .next-steps-list .step-meta {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.15rem;
+    }
+
+    /* ── Overview summary grid ── */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-stat {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      text-align: center;
+    }
+
+    .summary-stat .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+    }
+
+    .summary-stat .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Where-we-are status block ── */
+    .status-block {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .status-block h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--fg);
+      margin-bottom: 0.4rem;
+    }
+
+    .status-block p {
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ── Responsive adjustments ── */
+    @media (max-width: 640px) {
+      header h1 {
+        font-size: 1.4rem;
+      }
+
+      .glossary dl {
+        grid-template-columns: 1fr;
+      }
+
+      .glossary dt {
+        border-bottom: none;
+        padding-bottom: 0.15rem;
+      }
+
+      .glossary dd {
+        padding-top: 0;
+      }
+
+      .matrix {
+        display: block;
+        overflow-x: auto;
+      }
+
+      nav.toc .container {
+        gap: 0.15rem 0.75rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG sprite: position:absolute keeps it out of flow -->
+  <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+    <defs>
+      <!-- i-check: checkmark circle (done) -->
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="9 12 11 14 15 10"/>
+      </symbol>
+
+      <!-- i-clock: clock face (waiting / in-progress) -->
+      <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </symbol>
+
+      <!-- i-question: question mark circle (decision pending) -->
+      <symbol id="i-question" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </symbol>
+
+      <!-- i-warning: exclamation triangle (blocked) -->
+      <symbol id="i-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </symbol>
+
+      <!-- i-arrow: right-pointing chevron (next step) -->
+      <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ════════════════════════════════════════
+       HEADER
+  ════════════════════════════════════════ -->
+  <header>
+    <div class="container">
+      <h1>{{TITLE}}</h1>
+      <p class="subtitle">Generated: {{GENERATED_AT}} &mdash; Audience: {{AUDIENCE}}</p>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════
+       TABLE OF CONTENTS
+  ════════════════════════════════════════ -->
+  <nav class="toc" aria-label="Table of contents">
+    <div class="container">
+      <a href="#overview">Overview</a>
+      <a href="#where-we-are">Where We Are</a>
+      <a href="#done">Done</a>
+      <a href="#in-progress">In Progress</a>
+      <a href="#waiting-on">Waiting On</a>
+      <a href="#decisions-made">Decisions Made</a>
+      <a href="#decisions-pending">Decisions Pending</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#next-steps">Next Steps</a>
+      <a href="#glossary">Glossary</a>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════
+       MAIN CONTENT
+  ════════════════════════════════════════ -->
+  <main>
+    <div class="container">
+
+      <!-- 1. OVERVIEW -->
+      <section id="overview">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-check"/></svg>
+          <h2>Overview</h2>
+        </div>
+        {{OVERVIEW_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="summary-grid">
+          <div class="summary-stat">
+            <span class="stat-number">12</span>
+            <span class="stat-label">Total Items</span>
+          </div>
+          <div class="summary-stat">
+            <span class="stat-number">7</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="summary-stat">
+            <span class="stat-number">3</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+          <div class="summary-stat">
+            <span class="stat-number">2</span>
+            <span class="stat-label">Blocked</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Project Alpha — Q2 Status Brief</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        </div>
+      </section>
+
+      <!-- 2. WHERE WE ARE -->
+      <section id="where-we-are">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-clock"/></svg>
+          <h2>Where We Are</h2>
+        </div>
+        {{WHERE_WE_ARE_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="status-block">
+          <h3>Current Phase: Beta Integration</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. The team is currently integrating the data pipeline with the front-end dashboard. Core APIs are stable; UI review is ongoing.</p>
+        </div>
+        <div class="card">
+          <h3>Overall Progress</h3>
+          <div class="progress">
+            <div class="progress__fill" style="width:58%"></div>
+          </div>
+          <div class="progress-label">
+            <span>Phase 2 of 4</span>
+            <span>58% complete</span>
+          </div>
+          <p style="margin-top:0.75rem">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+        </div>
+        <div class="card">
+          <h3>Key Risks</h3>
+          <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+          <span class="pill pill--blocked">
+            <svg aria-hidden="true"><use href="#i-warning"/></svg>
+            Blocked: Vendor API
+          </span>
+        </div>
+      </section>
+
+      <!-- 3. DONE -->
+      <section id="done">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-check"/></svg>
+          <h2>Done</h2>
+        </div>
+        {{DONE_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <ul class="item-list">
+          <li>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+            <div class="item-content">
+              <div class="item-title">Authentication service redesign</div>
+              <div class="item-meta">Completed 2026-04-15 &mdash; Owner: Alice &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+            <div class="item-content">
+              <div class="item-title">Database schema migration v2</div>
+              <div class="item-meta">Completed 2026-04-22 &mdash; Owner: Bob &mdash; Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+            <div class="item-content">
+              <div class="item-title">CI/CD pipeline configuration</div>
+              <div class="item-meta">Completed 2026-05-01 &mdash; Owner: Carol &mdash; Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+            <div class="item-content">
+              <div class="item-title">Stakeholder requirements sign-off</div>
+              <div class="item-meta">Completed 2026-05-03 &mdash; Owner: David &mdash; Excepteur sint occaecat cupidatat non proident sunt in culpa.</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 4. IN PROGRESS -->
+      <section id="in-progress">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-clock"/></svg>
+          <h2>In Progress</h2>
+        </div>
+        {{IN_PROGRESS_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem">
+            <h3>Front-end dashboard integration</h3>
+            <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
+          </div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore. Owner: Eve — Due: 2026-05-20</p>
+          <div class="progress">
+            <div class="progress__fill" style="width:70%"></div>
+          </div>
+          <div class="progress-label"><span>ETA: 2026-05-20</span><span>70%</span></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem">
+            <h3>API rate limiting implementation</h3>
+            <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
+          </div>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Owner: Frank — Due: 2026-05-18</p>
+          <div class="progress">
+            <div class="progress__fill" style="width:40%"></div>
+          </div>
+          <div class="progress-label"><span>ETA: 2026-05-18</span><span>40%</span></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem">
+            <h3>User acceptance testing</h3>
+            <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
+          </div>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation. Owner: Grace — Due: 2026-05-25</p>
+          <div class="progress">
+            <div class="progress__fill" style="width:25%"></div>
+          </div>
+          <div class="progress-label"><span>ETA: 2026-05-25</span><span>25%</span></div>
+        </div>
+      </section>
+
+      <!-- 5. WAITING ON -->
+      <section id="waiting-on">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-clock"/></svg>
+          <h2>Waiting On</h2>
+        </div>
+        {{WAITING_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <ul class="item-list">
+          <li>
+            <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Waiting</span>
+            <div class="item-content">
+              <div class="item-title">Vendor API credentials</div>
+              <div class="item-meta">Waiting on: Acme Corp &mdash; Since: 2026-05-05 &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Waiting</span>
+            <div class="item-content">
+              <div class="item-title">Legal review of data-sharing agreement</div>
+              <div class="item-meta">Waiting on: Legal team &mdash; Since: 2026-05-07 &mdash; Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--inferred"><svg aria-hidden="true"><use href="#i-question"/></svg>Inferred</span>
+            <div class="item-content">
+              <div class="item-title">Infrastructure provisioning approval</div>
+              <div class="item-meta">Waiting on: IT Ops &mdash; Inferred from meeting notes &mdash; Nemo enim ipsam voluptatem quia voluptas sit aspernatur.</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 6. DECISIONS MADE -->
+      <section id="decisions-made">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-check"/></svg>
+          <h2>Decisions Made</h2>
+        </div>
+        {{DECISIONS_MADE_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+            <h3>Use PostgreSQL for primary data store</h3>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
+          </div>
+          <p>Decided on 2026-04-10 by: CTO, Lead Architect. Lorem ipsum dolor sit amet, consectetur adipiscing elit. The team evaluated MySQL, MongoDB, and PostgreSQL. PostgreSQL was selected for its JSON support and ACID compliance.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+            <h3>Adopt blue-green deployment strategy</h3>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
+          </div>
+          <p>Decided on 2026-04-18 by: DevOps lead. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+            <h3>Skip MVP mobile app — web-first launch</h3>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
+          </div>
+          <p>Decided on 2026-04-25 by: Product, Engineering. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        </div>
+      </section>
+
+      <!-- 7. DECISIONS PENDING -->
+      <section id="decisions-pending">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-question"/></svg>
+          <h2>Decisions Pending</h2>
+        </div>
+        {{DECISIONS_PENDING_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="card">
+          <table class="matrix">
+            <caption>Caching layer selection</caption>
+            <thead>
+              <tr>
+                <th>Option</th>
+                <th>Pros</th>
+                <th>Cons</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Redis</strong></td>
+                <td>In-memory speed, pub/sub, wide adoption</td>
+                <td>Separate service to manage, cost</td>
+              </tr>
+              <tr>
+                <td><strong>Memcached</strong></td>
+                <td>Simpler, very fast for simple KV</td>
+                <td>No persistence, no pub/sub</td>
+              </tr>
+              <tr>
+                <td><strong>In-process cache</strong></td>
+                <td>Zero latency, no infra</td>
+                <td>Not shared across instances, memory pressure</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-question"/></svg>Needs Decision</span> Owner: Arch team &mdash; Deadline: 2026-05-15</p>
+        </div>
+
+        <div class="card">
+          <table class="matrix">
+            <caption>Observability stack</caption>
+            <thead>
+              <tr>
+                <th>Option</th>
+                <th>Pros</th>
+                <th>Cons</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Prometheus + Grafana</strong></td>
+                <td>Open source, flexible, large ecosystem</td>
+                <td>Self-hosted complexity</td>
+              </tr>
+              <tr>
+                <td><strong>Managed SaaS observability</strong></td>
+                <td>Low ops burden, quick setup</td>
+                <td>Vendor lock-in, ongoing cost</td>
+              </tr>
+            </tbody>
+          </table>
+          <p><span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-question"/></svg>Needs Decision</span> Owner: DevOps lead &mdash; Deadline: 2026-05-20</p>
+        </div>
+      </section>
+
+      <!-- 8. TIMELINE -->
+      <section id="timeline">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-clock"/></svg>
+          <h2>Timeline</h2>
+        </div>
+        {{TIMELINE_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="timeline">
+          <div class="timeline__item done">
+            <h3>Phase 1 — Foundation</h3>
+            <p>2026-03-01 → 2026-04-01</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Core infrastructure and auth completed.</p>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+          </div>
+          <div class="timeline__item done">
+            <h3>Phase 2 — Integration</h3>
+            <p>2026-04-01 → 2026-05-20</p>
+            <p>Sed do eiusmod tempor incididunt ut labore. API and front-end integration underway.</p>
+            <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
+          </div>
+          <div class="timeline__item waiting">
+            <h3>Phase 3 — Testing &amp; Hardening</h3>
+            <p>2026-05-20 → 2026-06-10</p>
+            <p>Duis aute irure dolor in reprehenderit. Load tests, security audit, UAT.</p>
+            <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Waiting</span>
+          </div>
+          <div class="timeline__item">
+            <h3>Phase 4 — Launch</h3>
+            <p>2026-06-15</p>
+            <p>Ut enim ad minim veniam. Production go-live, monitoring ramp-up.</p>
+            <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Planned</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. NEXT STEPS -->
+      <section id="next-steps">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-arrow"/></svg>
+          <h2>Next Steps</h2>
+        </div>
+        {{NEXT_STEPS_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <ol class="next-steps-list">
+          <li>
+            <div class="step-content">
+              <div class="step-title">Resolve caching layer decision</div>
+              <div class="step-meta">Owner: Arch team &mdash; By: 2026-05-15 &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-title">Follow up with Acme Corp on API credentials</div>
+              <div class="step-meta">Owner: Frank &mdash; By: 2026-05-12 &mdash; Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-title">Complete front-end dashboard integration</div>
+              <div class="step-meta">Owner: Eve &mdash; By: 2026-05-20 &mdash; Duis aute irure dolor in reprehenderit in voluptate velit.</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-title">Kick off UAT with pilot users</div>
+              <div class="step-meta">Owner: Grace &mdash; By: 2026-05-25 &mdash; Ut enim ad minim veniam, quis nostrud exercitation ullamco.</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-title">Prepare launch runbook and rollback plan</div>
+              <div class="step-meta">Owner: DevOps lead &mdash; By: 2026-06-01 &mdash; Excepteur sint occaecat cupidatat non proident sunt in culpa.</div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- 10. GLOSSARY -->
+      <section id="glossary">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-question"/></svg>
+          <h2>Glossary</h2>
+        </div>
+        {{GLOSSARY_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="glossary">
+          <dl>
+            <dt>API</dt>
+            <dd>Application Programming Interface. A contract that allows services to communicate. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+            <dt>Blue-green deployment</dt>
+            <dd>A release strategy using two identical production environments to minimize downtime. Sed do eiusmod tempor incididunt ut labore et dolore magna.</dd>
+            <dt>ACID</dt>
+            <dd>Atomicity, Consistency, Isolation, Durability. Properties that guarantee database transactions are processed reliably.</dd>
+            <dt>UAT</dt>
+            <dd>User Acceptance Testing. A phase where end users validate the system against requirements. Duis aute irure dolor in reprehenderit.</dd>
+            <dt>CI/CD</dt>
+            <dd>Continuous Integration / Continuous Delivery. Automated pipelines for building, testing, and deploying software.</dd>
+            <dt>MVP</dt>
+            <dd>Minimum Viable Product. The smallest version of a product that delivers value and enables learning. Ut enim ad minim veniam.</dd>
+          </dl>
+        </div>
+      </section>
+
+    </div><!-- /.container -->
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>Generated by explica &mdash; self-contained, offline-readable, printable.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

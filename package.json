@@ -1,0 +1,52 @@
+{
+  "name": "@ojesusmp/explica",
+  "version": "1.0.0",
+  "description": "Claude Code skill that generates a self-contained graphical HTML+CSS guide explaining the current state of any prompt, project, program, or decision-point at an 18-year-old reading level.",
+  "keywords": [
+    "claude",
+    "claude-code",
+    "claude-skill",
+    "skill",
+    "documentation",
+    "html",
+    "report",
+    "project-status",
+    "explica"
+  ],
+  "homepage": "https://github.com/ojesusmp/TrueExplica#readme",
+  "bugs": {
+    "url": "https://github.com/ojesusmp/TrueExplica/issues"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Orlando Mendoza-Pajaro",
+    "email": "ojesusmp@gmail.com",
+    "url": "https://github.com/ojesusmp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ojesusmp/TrueExplica.git"
+  },
+  "type": "module",
+  "files": [
+    "SKILL.md",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "templates/",
+    "bin/install.mjs"
+  ],
+  "bin": {
+    "explica-install": "bin/install.mjs"
+  },
+  "scripts": {
+    "postinstall": "node bin/install.mjs",
+    "test": "node bin/install.mjs --dry-run"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
