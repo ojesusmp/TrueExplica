@@ -4,6 +4,26 @@ All notable changes to the `explica` skill are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-05-10
+
+### Changed
+- Redesigned `templates/base.html` again with the "Midnight Slate Editorial" palette — dark-first deep slate canvas, white ink, indigo accents. Replaces the prior cream/saffron treatment.
+- Default theme is now **dark mode** (slate `#020617` / `#0f172a` / `#1e293b`); light mode is the fallback via `@media (prefers-color-scheme: light)`.
+- Status pills: saturated solid fills with white text — done (emerald), in-progress (indigo), waiting (violet), blocked (red). The `.pill--inferred` amber badge keeps dashed border + italic to stay visually distinct.
+- Progress bars: indigo-to-violet gradient with subtle glow + shimmer highlight; percentage value in accent color.
+- Hero header now sits in a rounded gradient card (navy → midnight) with eyebrow rule and `<dl>` metadata strip.
+- TOC: sticky pill nav with backdrop blur over the dark page background.
+- Section headers: numbered (`01·`), thick gradient accent rule under each.
+- Cards: rounded 16px corners, dark slate fill, hover lift with accent border highlight.
+- Matrix table: deep slate header, alternating row backgrounds, accent left border on first column, hover row highlight.
+- Timeline: indigo gradient rail with pulsing in-progress dot.
+- Glossary: deep slate term column with saffron right rule, lighter cards on right.
+- Print mode: full color override → black-on-white for paper output.
+
+### Notes
+- No change to schema, trigger phrases, section IDs, CSS class contract, or SVG symbol IDs.
+- v1.0.2 (cream "Ink & Ochre" palette) remains on git tag and changelog history; v1.0.3 supersedes the palette choice based on user feedback.
+
 ## [1.0.2] - 2026-05-10
 
 ### Changed
