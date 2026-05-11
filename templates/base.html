@@ -5,701 +5,845 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{TITLE}}</title>
   <style>
-    /* ── CSS variables: light mode defaults ── */
+    /* ═══════════════════════════════════════════════════════════════════
+       EXPLICA — INK & OCHRE EDITORIAL
+       Magazine-grade project status report.
+       Warm cream paper, deep navy ink, saffron accent rail.
+       Self-contained: no JS, no external resources, no web fonts.
+       ═══════════════════════════════════════════════════════════════════ */
+
+    /* ── PALETTE: LIGHT ── */
     :root {
-      --bg: #ffffff;
-      --fg: #1a1a1a;
-      --muted: #6b7280;
-      --accent: #2563eb;
-      --border: #e5e7eb;
-      --card-bg: #f9fafb;
+      --bg:           #f4efdf;
+      --bg-grain:     #ebe4d0;
+      --surface:      #fffcf2;
+      --card-bg:      #ffffff;
+      --ink:          #0a1f44;
+      --ink-soft:     #2b3d63;
+      --muted:        #6c6553;
+      --rule:         #d4cdb6;
+      --border:       #c8c0a6;
+      --border-strong:#0a1f44;
+      --accent:       #b45309;
+      --accent-hot:   #d97706;
+      --accent-soft:  #fef3c7;
+      --shadow-sm:    0 1px 0 rgba(10,31,68,0.06);
+      --shadow:       0 1px 0 rgba(10,31,68,0.06), 0 8px 24px -10px rgba(10,31,68,0.18);
+      --shadow-card:  0 1px 0 rgba(10,31,68,0.06), 0 12px 32px -16px rgba(10,31,68,0.20);
 
-      --pill-done-bg: #dcfce7;
-      --pill-done-fg: #14532d;
-      --pill-inprogress-bg: #dbeafe;
-      --pill-inprogress-fg: #1e3a8a;
-      --pill-waiting-bg: #fef9c3;
-      --pill-waiting-fg: #713f12;
-      --pill-blocked-bg: #fee2e2;
-      --pill-blocked-fg: #7f1d1d;
+      --pill-done-bg:       #15803d;
+      --pill-done-fg:       #ffffff;
+      --pill-inprogress-bg: #1d4ed8;
+      --pill-inprogress-fg: #ffffff;
+      --pill-waiting-bg:    #7c3aed;
+      --pill-waiting-fg:    #ffffff;
+      --pill-blocked-bg:    #b91c1c;
+      --pill-blocked-fg:    #ffffff;
+      --pill-inferred-bg:   #fbbf24;
+      --pill-inferred-fg:   #3f2a00;
+      --pill-inferred-bd:   #92400e;
 
-      --pill-inferred-bg: #f59e0b;
-      --pill-inferred-fg: #1f1300;
+      --dot-done:       #15803d;
+      --dot-inprogress: #1d4ed8;
+      --dot-waiting:    #7c3aed;
+      --dot-blocked:    #b91c1c;
+
+      --progress-track: #ebe4d0;
+      --progress-fill1: #d97706;
+      --progress-fill2: #b45309;
     }
 
-    /* ── Dark mode overrides ── */
+    /* ── PALETTE: DARK ── */
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0f172a;
-        --fg: #e2e8f0;
-        --muted: #94a3b8;
-        --accent: #60a5fa;
-        --border: #1e293b;
-        --card-bg: #1e293b;
+        --bg:           #0a0f1f;
+        --bg-grain:     #0e1428;
+        --surface:      #121831;
+        --card-bg:      #161d3a;
+        --ink:          #f4ecd2;
+        --ink-soft:     #d9d1b9;
+        --muted:        #9b9483;
+        --rule:         #2a3457;
+        --border:       #2e3a60;
+        --border-strong:#fbbf24;
+        --accent:       #fbbf24;
+        --accent-hot:   #fcd34d;
+        --accent-soft:  #3a2a05;
+        --shadow-sm:    0 1px 0 rgba(0,0,0,0.4);
+        --shadow:       0 1px 0 rgba(0,0,0,0.4), 0 10px 28px -8px rgba(0,0,0,0.55);
+        --shadow-card:  0 1px 0 rgba(0,0,0,0.4), 0 16px 40px -16px rgba(0,0,0,0.65);
 
-        --pill-done-bg: #14532d;
-        --pill-done-fg: #bbf7d0;
-        --pill-inprogress-bg: #1e3a8a;
-        --pill-inprogress-fg: #bfdbfe;
-        --pill-waiting-bg: #713f12;
-        --pill-waiting-fg: #fef08a;
-        --pill-blocked-bg: #7f1d1d;
-        --pill-blocked-fg: #fecaca;
+        --pill-done-bg:       #16a34a;
+        --pill-done-fg:       #052e16;
+        --pill-inprogress-bg: #3b82f6;
+        --pill-inprogress-fg: #0c1f4a;
+        --pill-waiting-bg:    #a78bfa;
+        --pill-waiting-fg:    #1e1245;
+        --pill-blocked-bg:    #ef4444;
+        --pill-blocked-fg:    #2c0606;
+        --pill-inferred-bg:   #fbbf24;
+        --pill-inferred-fg:   #3f2a00;
+        --pill-inferred-bd:   #f59e0b;
 
-        --pill-inferred-bg: #b45309;
-        --pill-inferred-fg: #fef3c7;
+        --dot-done:       #22c55e;
+        --dot-inprogress: #60a5fa;
+        --dot-waiting:    #c4b5fd;
+        --dot-blocked:    #f87171;
+
+        --progress-track: #1f2747;
+        --progress-fill1: #fbbf24;
+        --progress-fill2: #f59e0b;
       }
     }
 
-    /* ── Print styles ── */
-    @media print {
-      nav.toc,
-      .no-print {
-        display: none !important;
-      }
-      body {
-        color: #000 !important;
-        background: #fff !important;
-        font-size: 11pt;
-        line-height: 1.4;
-      }
-      a {
-        color: #000 !important;
-        text-decoration: none;
-      }
-      .card {
-        border: 1px solid #ccc !important;
-        background: #fff !important;
-        box-shadow: none !important;
-        break-inside: avoid;
-      }
-      .pill {
-        border: 1px solid #999 !important;
-        background: #f0f0f0 !important;
-        color: #000 !important;
-      }
-      .progress {
-        border: 1px solid #999;
-      }
-      .progress__fill {
-        background: #555 !important;
-      }
-      h1, h2, h3 {
-        page-break-after: avoid;
-      }
-      section {
-        page-break-inside: avoid;
-      }
-      footer {
-        page-break-before: always;
-      }
-    }
-
-    /* ── Reset & base ── */
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-size: 16px;
-      line-height: 1.5;
-      color: var(--fg);
-      background: var(--bg);
+      line-height: 1.55;
+      color: var(--ink);
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(circle at 15% 0%, var(--bg-grain) 0, transparent 55%),
+        radial-gradient(circle at 90% 100%, var(--bg-grain) 0, transparent 50%);
+      background-attachment: fixed;
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
-    /* ── Layout ── */
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
+    /* ── LAYOUT ── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 1.5rem; }
 
-    /* ── Header ── */
-    header {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 2rem 0 1.5rem;
+    /* ═══ HEADER (editorial masthead) ═══ */
+    header.masthead {
+      padding: 3.5rem 0 0;
+      border-bottom: 1px solid var(--rule);
       margin-bottom: 0;
     }
-
-    header .container {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      color: var(--fg);
-      letter-spacing: -0.02em;
-    }
-
-    .subtitle {
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-
-    /* ── TOC Nav ── */
-    nav.toc {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 0.75rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    nav.toc .container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.25rem 1rem;
-      align-items: center;
-    }
-
-    nav.toc a {
-      font-size: 0.8rem;
-      color: var(--accent);
-      text-decoration: none;
-      white-space: nowrap;
-      padding: 0.2rem 0.4rem;
-      border-radius: 4px;
-      transition: background 0.15s;
-    }
-
-    nav.toc a:hover {
-      background: var(--border);
-    }
-
-    /* ── Main content ── */
-    main {
-      padding: 2rem 0 3rem;
-    }
-
-    main .container > section {
-      margin-bottom: 3rem;
-    }
-
-    /* ── Section header ── */
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 1.25rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 2px solid var(--border);
-    }
-
-    .section-header h2 {
-      font-size: 1.35rem;
-      font-weight: 600;
-      color: var(--fg);
-    }
-
-    .section-header svg {
-      width: 1.4rem;
-      height: 1.4rem;
-      fill: none;
-      stroke: var(--accent);
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex-shrink: 0;
-    }
-
-    /* ── Cards ── */
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .card h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.4rem;
-      color: var(--fg);
-    }
-
-    .card p {
-      color: var(--muted);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .card p:last-child {
-      margin-bottom: 0;
-    }
-
-    /* ── Pills (status badges) ── */
-    .pill {
+    .masthead-eyebrow {
       display: inline-flex;
       align-items: center;
-      gap: 0.3rem;
+      gap: 0.5rem;
       font-size: 0.72rem;
-      font-weight: 600;
-      padding: 0.2rem 0.6rem;
-      border-radius: 9999px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
+      color: var(--accent);
+      margin-bottom: 1rem;
     }
-
-    .pill svg {
-      width: 0.9rem;
-      height: 0.9rem;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex-shrink: 0;
-    }
-
-    .pill--done {
-      background: var(--pill-done-bg);
-      color: var(--pill-done-fg);
-    }
-
-    .pill--in-progress {
-      background: var(--pill-inprogress-bg);
-      color: var(--pill-inprogress-fg);
-    }
-
-    .pill--waiting {
-      background: var(--pill-waiting-bg);
-      color: var(--pill-waiting-fg);
-    }
-
-    .pill--blocked {
-      background: var(--pill-blocked-bg);
-      color: var(--pill-blocked-fg);
-    }
-
-    .pill--inferred {
-      background: #f59e0b;
-      color: #1f1300;
-    }
-
-    /* ── Progress bar ── */
-    .progress {
-      width: 100%;
-      height: 8px;
-      background: var(--border);
-      border-radius: 9999px;
-      overflow: hidden;
-      margin: 0.5rem 0;
-    }
-
-    .progress__fill {
-      height: 100%;
+    .masthead-eyebrow::before {
+      content: "";
+      width: 1.75rem; height: 2px;
       background: var(--accent);
-      border-radius: 9999px;
-      transition: width 0.3s ease;
+      display: inline-block;
     }
-
-    .progress-label {
+    .masthead h1 {
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      line-height: 1.04;
+      letter-spacing: -0.025em;
+      font-weight: 800;
+      color: var(--ink);
+      margin: 0 0 1rem;
+      max-width: 22ch;
+    }
+    .masthead-meta {
       display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      color: var(--muted);
-      margin-top: 0.2rem;
-    }
-
-    /* ── Timeline ── */
-    .timeline {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-      position: relative;
-      padding-left: 2rem;
-    }
-
-    .timeline::before {
-      content: '';
-      position: absolute;
-      left: 0.55rem;
-      top: 0.6rem;
-      bottom: 0.6rem;
-      width: 2px;
-      background: var(--border);
-    }
-
-    .timeline__item {
-      position: relative;
-      padding: 0.75rem 0 0.75rem 1rem;
-    }
-
-    .timeline__item::before {
-      content: '';
-      position: absolute;
-      left: -1.45rem;
-      top: 1rem;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--accent);
-      border: 2px solid var(--bg);
-      box-shadow: 0 0 0 2px var(--accent);
-    }
-
-    .timeline__item.done::before {
-      background: var(--pill-done-fg);
-      box-shadow: 0 0 0 2px var(--pill-done-fg);
-    }
-
-    .timeline__item.waiting::before {
-      background: var(--pill-waiting-fg);
-      box-shadow: 0 0 0 2px var(--pill-waiting-fg);
-    }
-
-    .timeline__item.blocked::before {
-      background: var(--pill-blocked-fg);
-      box-shadow: 0 0 0 2px var(--pill-blocked-fg);
-    }
-
-    .timeline__item h3 {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--fg);
-      margin-bottom: 0.2rem;
-    }
-
-    .timeline__item p {
+      flex-wrap: wrap;
+      gap: 1.5rem 2rem;
+      align-items: baseline;
+      padding: 1.5rem 0 1.75rem;
       font-size: 0.85rem;
       color: var(--muted);
     }
-
-    .timeline__item .pill {
-      margin-top: 0.35rem;
-    }
-
-    /* ── Decision matrix table ── */
-    .matrix {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
-
-    .matrix caption {
-      font-size: 1rem;
-      font-weight: 600;
-      text-align: left;
-      padding: 0.5rem 0;
-      color: var(--fg);
-    }
-
-    .matrix th {
-      background: var(--card-bg);
-      color: var(--muted);
-      font-size: 0.75rem;
-      font-weight: 600;
+    .masthead-meta dt {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 0.6rem 0.75rem;
-      text-align: left;
-      border-bottom: 2px solid var(--border);
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.2rem;
+      display: block;
     }
-
-    .matrix td {
-      padding: 0.65rem 0.75rem;
-      border-bottom: 1px solid var(--border);
-      color: var(--fg);
-      vertical-align: top;
-    }
-
-    .matrix tr:last-child td {
-      border-bottom: none;
-    }
-
-    .matrix tr:hover td {
-      background: var(--card-bg);
-    }
-
-    /* ── Glossary ── */
-    .glossary dl {
-      display: grid;
-      grid-template-columns: minmax(10rem, 22%) 1fr;
-      gap: 0;
-    }
-
-    .glossary dt {
-      font-weight: 600;
-      color: var(--fg);
-      font-size: 0.9rem;
-      padding: 0.6rem 1rem 0.6rem 0;
-      border-bottom: 1px solid var(--border);
-      align-self: start;
-    }
-
-    .glossary dd {
-      color: var(--muted);
-      font-size: 0.9rem;
-      padding: 0.6rem 0;
-      border-bottom: 1px solid var(--border);
+    .masthead-meta dd {
+      font-size: 0.95rem;
+      color: var(--ink);
+      font-weight: 500;
       margin: 0;
     }
 
-    .glossary dl dt:last-of-type,
-    .glossary dl dd:last-of-type {
-      border-bottom: none;
+    /* ═══ TOC (sticky horizontal pill nav) ═══ */
+    nav.toc {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--rule);
+      padding: 0.85rem 0;
     }
-
-    /* ── Lists ── */
-    .item-list {
-      list-style: none;
+    nav.toc .container {
       display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.4rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) transparent;
+    }
+    nav.toc .container::-webkit-scrollbar { height: 4px; }
+    nav.toc .container::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+    nav.toc a {
+      flex-shrink: 0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--ink-soft);
+      text-decoration: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    nav.toc a:hover {
+      color: var(--ink);
+      background: var(--surface);
+      border-color: var(--border);
     }
 
+    /* ═══ MAIN ═══ */
+    main { padding: 2.5rem 0 4rem; }
+
+    section { margin-bottom: 4rem; scroll-margin-top: 5rem; }
+
+    /* ── Section header: numeral + title + rule (editorial) ── */
+    .section-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: end;
+      gap: 1.25rem;
+      padding-bottom: 0.85rem;
+      margin-bottom: 1.75rem;
+      border-bottom: 1px solid var(--ink);
+      position: relative;
+    }
+    .section-header::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -4px;
+      width: 4rem; height: 3px;
+      background: var(--accent);
+    }
+    .section-header svg {
+      width: 1.6rem; height: 1.6rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .section-header .section-count {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 0.25rem;
+    }
+
+    /* Auto-numbered sections via CSS counter */
+    main { counter-reset: section-counter; }
+    section { counter-increment: section-counter; }
+    .section-header h2::before {
+      content: counter(section-counter, decimal-leading-zero) " · ";
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.7em;
+      letter-spacing: 0.08em;
+      vertical-align: 0.18em;
+      margin-right: 0.15em;
+    }
+
+    /* ═══ CARDS ═══ */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.2s ease, transform 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-card);
+      transform: translateY(-1px);
+    }
+    .card h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+    .card p {
+      font-size: 0.94rem;
+      color: var(--ink-soft);
+      margin-bottom: 0.6rem;
+    }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* ═══ PILLS ═══ */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.28rem 0.7rem 0.28rem 0.55rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 4px;
+      white-space: nowrap;
+      line-height: 1;
+      box-shadow: var(--shadow-sm);
+    }
+    .pill svg { width: 0.9rem; height: 0.9rem; }
+
+    .pill--done       { background: var(--pill-done-bg);       color: var(--pill-done-fg); }
+    .pill--in-progress,
+    .pill--inprogress { background: var(--pill-inprogress-bg); color: var(--pill-inprogress-fg); }
+    .pill--waiting    { background: var(--pill-waiting-bg);    color: var(--pill-waiting-fg); }
+    .pill--blocked    { background: var(--pill-blocked-bg);    color: var(--pill-blocked-fg); }
+
+    .pill--inferred {
+      background: var(--pill-inferred-bg);
+      color: var(--pill-inferred-fg);
+      border: 1.5px dashed var(--pill-inferred-bd);
+      font-style: italic;
+      padding-block: 0.22rem;
+    }
+
+    /* ═══ PROGRESS BAR ═══ */
+    .progress {
+      position: relative;
+      height: 10px;
+      background: var(--progress-track);
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(10,31,68,0.10);
+      margin-top: 0.8rem;
+    }
+    .progress__fill {
+      height: 100%;
+      border-radius: 5px;
+      background: linear-gradient(90deg, var(--progress-fill1) 0%, var(--progress-fill2) 100%);
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.15) inset;
+      position: relative;
+      transition: width 0.6s ease;
+    }
+    .progress__fill::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.22), transparent);
+      border-radius: 5px 5px 0 0;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.5rem;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+    }
+    .progress-label span:last-child {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ═══ STATUS BLOCK (where-we-are featured card) ═══ */
+    .status-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--accent);
+      border-radius: 4px;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .status-block::before {
+      content: "NOW";
+      position: absolute;
+      top: 0.85rem; right: 1rem;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.25em;
+      color: var(--accent);
+      opacity: 0.65;
+    }
+    .status-block h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+    .status-block p {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
+
+    /* ═══ SUMMARY GRID (overview stats) ═══ */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .summary-stat {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: 4px;
+      padding: 1.1rem 1rem 0.95rem;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    .summary-stat .stat-number {
+      display: block;
+      font-size: 2.6rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 0.35rem;
+    }
+    .summary-stat .stat-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ═══ ITEM LIST ═══ */
+    .item-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
     .item-list li {
       display: flex;
       align-items: flex-start;
-      gap: 0.75rem;
+      gap: 0.9rem;
+      padding: 0.85rem 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--rule);
+      border-radius: 4px;
+      transition: border-left-color 0.2s, transform 0.2s;
     }
+    .item-list li:hover { transform: translateX(2px); }
+    .item-list li:has(.pill--done)       { border-left-color: var(--dot-done); }
+    .item-list li:has(.pill--in-progress),
+    .item-list li:has(.pill--inprogress) { border-left-color: var(--dot-inprogress); }
+    .item-list li:has(.pill--waiting)    { border-left-color: var(--dot-waiting); }
+    .item-list li:has(.pill--blocked)    { border-left-color: var(--dot-blocked); }
+    .item-list li:has(.pill--inferred)   { border-left-color: var(--accent-hot); border-left-style: dashed; }
 
-    .item-list li .pill {
-      flex-shrink: 0;
-      margin-top: 0.1rem;
-    }
-
-    .item-list li .item-content {
-      flex: 1;
-    }
-
+    .item-list li .pill { flex-shrink: 0; margin-top: 0.15rem; }
+    .item-list li .item-content { flex: 1; min-width: 0; }
     .item-list li .item-title {
-      font-weight: 600;
-      color: var(--fg);
-      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 0.98rem;
+      letter-spacing: -0.005em;
     }
-
     .item-list li .item-meta {
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       color: var(--muted);
-      margin-top: 0.15rem;
+      margin-top: 0.18rem;
     }
 
-    /* ── Next steps ordered list ── */
+    /* ═══ TIMELINE ═══ */
+    .timeline {
+      position: relative;
+      padding: 0.5rem 0 0.5rem 2.5rem;
+      margin: 1rem 0;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 0.9rem;
+      top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--accent-hot) 50%, var(--rule) 100%);
+      border-radius: 2px;
+    }
+    .timeline__item {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .timeline__item::before {
+      content: "";
+      position: absolute;
+      left: -2.18rem;
+      top: 1.3rem;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 3px solid var(--muted);
+      box-shadow: 0 0 0 3px var(--bg);
+      z-index: 1;
+    }
+    .timeline__item.done::before       { border-color: var(--dot-done);       background: var(--dot-done); }
+    .timeline__item.in-progress::before,
+    .timeline__item.inprogress::before { border-color: var(--dot-inprogress); background: var(--dot-inprogress); animation: pulse 2s ease-in-out infinite; }
+    .timeline__item.waiting::before    { border-color: var(--dot-waiting);    background: var(--dot-waiting); }
+    .timeline__item.blocked::before    { border-color: var(--dot-blocked);    background: var(--dot-blocked); }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 3px var(--bg), 0 0 0 0 color-mix(in srgb, var(--dot-inprogress) 60%, transparent); }
+      50%      { box-shadow: 0 0 0 3px var(--bg), 0 0 0 6px color-mix(in srgb, var(--dot-inprogress) 0%,  transparent); }
+    }
+
+    .timeline__item h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.01em;
+    }
+    .timeline__item p {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      margin-bottom: 0.4rem;
+    }
+    .timeline__item p:first-of-type {
+      font-family: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+      font-size: 0.78rem;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      margin-bottom: 0.55rem;
+    }
+    .timeline__item .pill { margin-top: 0.2rem; }
+
+    /* ═══ MATRIX (decisions-pending table) ═══ */
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.5rem 0;
+      font-size: 0.9rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .matrix caption {
+      caption-side: top;
+      text-align: left;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      padding-bottom: 0.7rem;
+    }
+    .matrix th {
+      background: var(--ink);
+      color: var(--bg);
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+    .matrix td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--ink-soft);
+      vertical-align: top;
+    }
+    .matrix tbody tr:nth-child(even) td { background: color-mix(in srgb, var(--bg) 35%, transparent); }
+    .matrix tr:last-child td { border-bottom: none; }
+    .matrix tr:hover td { background: var(--accent-soft); color: var(--ink); }
+    .matrix td strong {
+      color: var(--ink);
+      font-weight: 700;
+      letter-spacing: -0.005em;
+    }
+    .matrix td:first-child {
+      border-left: 3px solid var(--accent);
+      padding-left: 0.85rem;
+    }
+
+    /* ═══ NEXT STEPS ═══ */
     .next-steps-list {
       counter-reset: step-counter;
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 0.7rem;
     }
-
     .next-steps-list li {
       counter-increment: step-counter;
       display: grid;
-      grid-template-columns: 2rem 1fr;
-      gap: 0.75rem;
+      grid-template-columns: 2.5rem 1fr;
+      gap: 1rem;
       align-items: start;
+      padding: 0.95rem 1.1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-
+    .next-steps-list li:hover {
+      transform: translateX(3px);
+      box-shadow: var(--shadow);
+    }
     .next-steps-list li::before {
-      content: counter(step-counter);
+      content: counter(step-counter, decimal-leading-zero);
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      font-size: 0.8rem;
-      font-weight: 700;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 4px;
+      background: var(--ink);
+      color: var(--accent);
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
       flex-shrink: 0;
     }
-
-    .next-steps-list .step-content {
-      padding-top: 0.2rem;
-    }
-
+    .next-steps-list .step-content { padding-top: 0.18rem; min-width: 0; }
     .next-steps-list .step-title {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--fg);
-    }
-
-    .next-steps-list .step-meta {
-      font-size: 0.82rem;
-      color: var(--muted);
-      margin-top: 0.15rem;
-    }
-
-    /* ── Overview summary grid ── */
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .summary-stat {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1rem 1.25rem;
-      text-align: center;
-    }
-
-    .summary-stat .stat-number {
-      font-size: 2rem;
       font-weight: 700;
-      color: var(--accent);
-      display: block;
-    }
-
-    .summary-stat .stat-label {
-      font-size: 0.8rem;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    /* ── Where-we-are status block ── */
-    .status-block {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-left: 4px solid var(--accent);
-      border-radius: 0 8px 8px 0;
-      padding: 1.25rem 1.5rem;
-      margin-bottom: 1rem;
-    }
-
-    .status-block h3 {
       font-size: 1rem;
-      font-weight: 600;
-      color: var(--fg);
-      margin-bottom: 0.4rem;
+      color: var(--ink);
+      letter-spacing: -0.005em;
     }
-
-    .status-block p {
-      font-size: 0.9rem;
+    .next-steps-list .step-meta {
+      font-size: 0.84rem;
       color: var(--muted);
+      margin-top: 0.2rem;
     }
 
-    /* ── Footer ── */
+    /* ═══ GLOSSARY ═══ */
+    .glossary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .glossary dl {
+      display: grid;
+      grid-template-columns: minmax(8rem, 26%) 1fr;
+      gap: 0;
+    }
+    .glossary dt {
+      font-weight: 800;
+      color: var(--ink);
+      font-size: 0.85rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 0.95rem 1rem 0.95rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      border-right: 3px solid var(--accent);
+      background: color-mix(in srgb, var(--accent-soft) 50%, transparent);
+      align-self: stretch;
+      display: flex;
+      align-items: flex-start;
+    }
+    .glossary dd {
+      color: var(--ink-soft);
+      font-size: 0.93rem;
+      line-height: 1.55;
+      padding: 0.95rem 1.25rem;
+      border-bottom: 1px solid var(--border);
+      margin: 0;
+    }
+    .glossary dl > dt:last-of-type,
+    .glossary dl > dd:last-of-type { border-bottom: none; }
+
+    /* ═══ FOOTER ═══ */
     footer {
-      border-top: 1px solid var(--border);
-      padding: 1.5rem 0;
-      text-align: center;
-      font-size: 0.8rem;
+      border-top: 1px solid var(--ink);
+      padding: 2rem 0 2.5rem;
+      margin-top: 2rem;
+      position: relative;
+    }
+    footer::before {
+      content: "";
+      position: absolute;
+      top: -3px; left: 0;
+      width: 5rem; height: 5px;
+      background: var(--accent);
+    }
+    footer p {
+      font-size: 0.78rem;
       color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    footer p strong { color: var(--accent); letter-spacing: 0.16em; text-transform: uppercase; font-weight: 800; }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 720px) {
+      .masthead { padding-top: 2rem; }
+      .section-header { grid-template-columns: auto 1fr; gap: 0.8rem; }
+      .section-header .section-count { display: none; }
+      .glossary dl { grid-template-columns: 1fr; }
+      .glossary dt { border-right: none; border-bottom: none; padding-bottom: 0.35rem; }
+      .glossary dd { padding-top: 0; }
+      .matrix { display: block; overflow-x: auto; }
+      .timeline { padding-left: 2rem; }
+      .timeline::before { left: 0.65rem; }
+      .timeline__item::before { left: -1.95rem; }
     }
 
-    /* ── Responsive adjustments ── */
-    @media (max-width: 640px) {
-      header h1 {
-        font-size: 1.4rem;
+    /* ═══ PRINT ═══ */
+    @media print {
+      :root {
+        --bg: #ffffff;
+        --bg-grain: #ffffff;
+        --surface: #ffffff;
+        --card-bg: #ffffff;
+        --ink: #000000;
+        --ink-soft: #1a1a1a;
+        --muted: #444444;
+        --rule: #cccccc;
+        --border: #888888;
+        --accent: #000000;
+        --accent-hot: #000000;
+        --accent-soft: #f0f0f0;
       }
-
-      .glossary dl {
-        grid-template-columns: 1fr;
+      nav.toc, .no-print { display: none !important; }
+      body {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 10.5pt;
+        line-height: 1.4;
       }
-
-      .glossary dt {
-        border-bottom: none;
-        padding-bottom: 0.15rem;
+      a { color: #000 !important; text-decoration: none; }
+      .card, .status-block, .timeline__item, .next-steps-list li, .summary-stat {
+        background: #fff !important;
+        border: 1px solid #888 !important;
+        box-shadow: none !important;
+        break-inside: avoid;
       }
-
-      .glossary dd {
-        padding-top: 0;
+      .glossary, .matrix { background: #fff !important; border: 1px solid #888 !important; box-shadow: none !important; }
+      .glossary dt { background: #f5f5f5 !important; color: #000 !important; border-right: 2px solid #000 !important; }
+      .pill {
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
       }
-
-      .matrix {
-        display: block;
-        overflow-x: auto;
-      }
-
-      nav.toc .container {
-        gap: 0.15rem 0.75rem;
-      }
+      .pill--inferred { border: 1.5px dashed #000 !important; }
+      .progress { border: 1px solid #888 !important; background: #fff !important; }
+      .progress__fill { background: #444 !important; }
+      .matrix th { background: #000 !important; color: #fff !important; }
+      .matrix td:first-child { border-left: 2px solid #000 !important; }
+      .section-header { border-bottom: 2px solid #000 !important; }
+      .section-header::after { background: #000 !important; }
+      .next-steps-list li::before { background: #000 !important; color: #fff !important; }
+      .status-block { border-left: 4px solid #000 !important; }
+      .timeline::before { background: #000 !important; }
+      .timeline__item::before { background: #000 !important; border-color: #000 !important; box-shadow: 0 0 0 2px #fff !important; }
+      h1, h2, h3 { page-break-after: avoid; }
+      section { page-break-inside: avoid; }
+      footer { page-break-before: always; }
     }
   </style>
 </head>
 <body>
 
-  <!-- SVG sprite: position:absolute keeps it out of flow -->
+  <!-- SVG sprite -->
   <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
     <defs>
-      <!-- i-check: checkmark circle (done) -->
-      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/>
         <polyline points="9 12 11 14 15 10"/>
       </symbol>
-
-      <!-- i-clock: clock face (waiting / in-progress) -->
-      <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/>
         <polyline points="12 6 12 12 16 14"/>
       </symbol>
-
-      <!-- i-question: question mark circle (decision pending) -->
-      <symbol id="i-question" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <symbol id="i-question" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/>
         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
         <line x1="12" y1="17" x2="12.01" y2="17"/>
       </symbol>
-
-      <!-- i-warning: exclamation triangle (blocked) -->
-      <symbol id="i-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <symbol id="i-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
         <line x1="12" y1="9" x2="12" y2="13"/>
         <line x1="12" y1="17" x2="12.01" y2="17"/>
       </symbol>
-
-      <!-- i-arrow: right-pointing chevron (next step) -->
-      <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="5" y1="12" x2="19" y2="12"/>
         <polyline points="12 5 19 12 12 19"/>
       </symbol>
     </defs>
   </svg>
 
-  <!-- ════════════════════════════════════════
-       HEADER
-  ════════════════════════════════════════ -->
-  <header>
+  <!-- ═══ HEADER ═══ -->
+  <header class="masthead">
     <div class="container">
+      <div class="masthead-eyebrow">Project Status &middot; Editorial Brief</div>
       <h1>{{TITLE}}</h1>
-      <p class="subtitle">Generated: {{GENERATED_AT}} &mdash; Audience: {{AUDIENCE}}</p>
+      <dl class="masthead-meta">
+        <div>
+          <dt>Generated</dt>
+          <dd>{{GENERATED_AT}}</dd>
+        </div>
+        <div>
+          <dt>Audience</dt>
+          <dd>{{AUDIENCE}}</dd>
+        </div>
+        <div>
+          <dt>Format</dt>
+          <dd>Self-contained &middot; Offline-readable</dd>
+        </div>
+      </dl>
     </div>
   </header>
 
-  <!-- ════════════════════════════════════════
-       TABLE OF CONTENTS
-  ════════════════════════════════════════ -->
+  <!-- ═══ TABLE OF CONTENTS ═══ -->
   <nav class="toc" aria-label="Table of contents">
     <div class="container">
-      <a href="#overview">Overview</a>
-      <a href="#where-we-are">Where We Are</a>
-      <a href="#done">Done</a>
-      <a href="#in-progress">In Progress</a>
-      <a href="#waiting-on">Waiting On</a>
-      <a href="#decisions-made">Decisions Made</a>
-      <a href="#decisions-pending">Decisions Pending</a>
-      <a href="#timeline">Timeline</a>
-      <a href="#next-steps">Next Steps</a>
-      <a href="#glossary">Glossary</a>
+      <a href="#overview">01 · Overview</a>
+      <a href="#where-we-are">02 · Where We Are</a>
+      <a href="#done">03 · Done</a>
+      <a href="#in-progress">04 · In Progress</a>
+      <a href="#waiting-on">05 · Waiting On</a>
+      <a href="#decisions-made">06 · Decisions Made</a>
+      <a href="#decisions-pending">07 · Decisions Pending</a>
+      <a href="#timeline">08 · Timeline</a>
+      <a href="#next-steps">09 · Next Steps</a>
+      <a href="#glossary">10 · Glossary</a>
     </div>
   </nav>
 
-  <!-- ════════════════════════════════════════
-       MAIN CONTENT
-  ════════════════════════════════════════ -->
+  <!-- ═══ MAIN ═══ -->
   <main>
     <div class="container">
 
@@ -708,6 +852,7 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-check"/></svg>
           <h2>Overview</h2>
+          <span class="section-count">Section 01</span>
         </div>
         {{OVERVIEW_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
@@ -741,31 +886,24 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-clock"/></svg>
           <h2>Where We Are</h2>
+          <span class="section-count">Section 02</span>
         </div>
         {{WHERE_WE_ARE_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
         <div class="status-block">
           <h3>Current Phase: Beta Integration</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. The team is currently integrating the data pipeline with the front-end dashboard. Core APIs are stable; UI review is ongoing.</p>
+          <p>The team is currently integrating the data pipeline with the front-end dashboard. Core APIs are stable; UI review is ongoing.</p>
         </div>
         <div class="card">
           <h3>Overall Progress</h3>
-          <div class="progress">
-            <div class="progress__fill" style="width:58%"></div>
-          </div>
-          <div class="progress-label">
-            <span>Phase 2 of 4</span>
-            <span>58% complete</span>
-          </div>
-          <p style="margin-top:0.75rem">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+          <div class="progress"><div class="progress__fill" style="width:58%"></div></div>
+          <div class="progress-label"><span>Phase 2 of 4</span><span>58% complete</span></div>
+          <p style="margin-top:0.85rem">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
         </div>
         <div class="card">
           <h3>Key Risks</h3>
           <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
-          <span class="pill pill--blocked">
-            <svg aria-hidden="true"><use href="#i-warning"/></svg>
-            Blocked: Vendor API
-          </span>
+          <span class="pill pill--blocked"><svg aria-hidden="true"><use href="#i-warning"/></svg>Blocked: Vendor API</span>
         </div>
       </section>
 
@@ -774,6 +912,7 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-check"/></svg>
           <h2>Done</h2>
+          <span class="section-count">Section 03</span>
         </div>
         {{DONE_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
@@ -782,28 +921,28 @@
             <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
             <div class="item-content">
               <div class="item-title">Authentication service redesign</div>
-              <div class="item-meta">Completed 2026-04-15 &mdash; Owner: Alice &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing.</div>
+              <div class="item-meta">Completed 2026-04-15 · Owner: Alice · Lorem ipsum dolor sit amet, consectetur adipiscing.</div>
             </div>
           </li>
           <li>
             <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
             <div class="item-content">
               <div class="item-title">Database schema migration v2</div>
-              <div class="item-meta">Completed 2026-04-22 &mdash; Owner: Bob &mdash; Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+              <div class="item-meta">Completed 2026-04-22 · Owner: Bob · Sed do eiusmod tempor incididunt ut labore et dolore.</div>
             </div>
           </li>
           <li>
             <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
             <div class="item-content">
               <div class="item-title">CI/CD pipeline configuration</div>
-              <div class="item-meta">Completed 2026-05-01 &mdash; Owner: Carol &mdash; Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</div>
+              <div class="item-meta">Completed 2026-05-01 · Owner: Carol · Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</div>
             </div>
           </li>
           <li>
             <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
             <div class="item-content">
               <div class="item-title">Stakeholder requirements sign-off</div>
-              <div class="item-meta">Completed 2026-05-03 &mdash; Owner: David &mdash; Excepteur sint occaecat cupidatat non proident sunt in culpa.</div>
+              <div class="item-meta">Completed 2026-05-03 · Owner: David · Excepteur sint occaecat cupidatat non proident sunt in culpa.</div>
             </div>
           </li>
         </ul>
@@ -814,40 +953,35 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-clock"/></svg>
           <h2>In Progress</h2>
+          <span class="section-count">Section 04</span>
         </div>
         {{IN_PROGRESS_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
         <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
             <h3>Front-end dashboard integration</h3>
             <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
           </div>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore. Owner: Eve — Due: 2026-05-20</p>
-          <div class="progress">
-            <div class="progress__fill" style="width:70%"></div>
-          </div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Owner: Eve · Due: 2026-05-20.</p>
+          <div class="progress"><div class="progress__fill" style="width:70%"></div></div>
           <div class="progress-label"><span>ETA: 2026-05-20</span><span>70%</span></div>
         </div>
         <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
             <h3>API rate limiting implementation</h3>
             <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
           </div>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Owner: Frank — Due: 2026-05-18</p>
-          <div class="progress">
-            <div class="progress__fill" style="width:40%"></div>
-          </div>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Owner: Frank · Due: 2026-05-18.</p>
+          <div class="progress"><div class="progress__fill" style="width:40%"></div></div>
           <div class="progress-label"><span>ETA: 2026-05-18</span><span>40%</span></div>
         </div>
         <div class="card">
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.5rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
             <h3>User acceptance testing</h3>
             <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
           </div>
-          <p>Ut enim ad minim veniam, quis nostrud exercitation. Owner: Grace — Due: 2026-05-25</p>
-          <div class="progress">
-            <div class="progress__fill" style="width:25%"></div>
-          </div>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation. Owner: Grace · Due: 2026-05-25.</p>
+          <div class="progress"><div class="progress__fill" style="width:25%"></div></div>
           <div class="progress-label"><span>ETA: 2026-05-25</span><span>25%</span></div>
         </div>
       </section>
@@ -857,6 +991,7 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-clock"/></svg>
           <h2>Waiting On</h2>
+          <span class="section-count">Section 05</span>
         </div>
         {{WAITING_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
@@ -865,21 +1000,21 @@
             <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Waiting</span>
             <div class="item-content">
               <div class="item-title">Vendor API credentials</div>
-              <div class="item-meta">Waiting on: Acme Corp &mdash; Since: 2026-05-05 &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+              <div class="item-meta">Waiting on: Acme Corp · Since: 2026-05-05 · Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
             </div>
           </li>
           <li>
             <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Waiting</span>
             <div class="item-content">
               <div class="item-title">Legal review of data-sharing agreement</div>
-              <div class="item-meta">Waiting on: Legal team &mdash; Since: 2026-05-07 &mdash; Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+              <div class="item-meta">Waiting on: Legal team · Since: 2026-05-07 · Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
             </div>
           </li>
           <li>
             <span class="pill pill--inferred"><svg aria-hidden="true"><use href="#i-question"/></svg>Inferred</span>
             <div class="item-content">
               <div class="item-title">Infrastructure provisioning approval</div>
-              <div class="item-meta">Waiting on: IT Ops &mdash; Inferred from meeting notes &mdash; Nemo enim ipsam voluptatem quia voluptas sit aspernatur.</div>
+              <div class="item-meta">Waiting on: IT Ops · Inferred from meeting notes · Nemo enim ipsam voluptatem quia voluptas sit aspernatur.</div>
             </div>
           </li>
         </ul>
@@ -890,25 +1025,26 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-check"/></svg>
           <h2>Decisions Made</h2>
+          <span class="section-count">Section 06</span>
         </div>
         {{DECISIONS_MADE_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
         <div class="card">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
             <h3>Use PostgreSQL for primary data store</h3>
             <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
           </div>
-          <p>Decided on 2026-04-10 by: CTO, Lead Architect. Lorem ipsum dolor sit amet, consectetur adipiscing elit. The team evaluated MySQL, MongoDB, and PostgreSQL. PostgreSQL was selected for its JSON support and ACID compliance.</p>
+          <p>Decided on 2026-04-10 by: CTO, Lead Architect. The team evaluated MySQL, MongoDB, and PostgreSQL. PostgreSQL was selected for its JSON support and ACID compliance.</p>
         </div>
         <div class="card">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
             <h3>Adopt blue-green deployment strategy</h3>
             <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
           </div>
           <p>Decided on 2026-04-18 by: DevOps lead. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.</p>
         </div>
         <div class="card">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
             <h3>Skip MVP mobile app — web-first launch</h3>
             <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
           </div>
@@ -921,6 +1057,7 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-question"/></svg>
           <h2>Decisions Pending</h2>
+          <span class="section-count">Section 07</span>
         </div>
         {{DECISIONS_PENDING_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
@@ -928,11 +1065,7 @@
           <table class="matrix">
             <caption>Caching layer selection</caption>
             <thead>
-              <tr>
-                <th>Option</th>
-                <th>Pros</th>
-                <th>Cons</th>
-              </tr>
+              <tr><th>Option</th><th>Pros</th><th>Cons</th></tr>
             </thead>
             <tbody>
               <tr>
@@ -952,18 +1085,14 @@
               </tr>
             </tbody>
           </table>
-          <p><span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-question"/></svg>Needs Decision</span> Owner: Arch team &mdash; Deadline: 2026-05-15</p>
+          <p style="margin-top:0.85rem"><span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-question"/></svg>Needs Decision</span> Owner: Arch team · Deadline: 2026-05-15</p>
         </div>
 
         <div class="card">
           <table class="matrix">
             <caption>Observability stack</caption>
             <thead>
-              <tr>
-                <th>Option</th>
-                <th>Pros</th>
-                <th>Cons</th>
-              </tr>
+              <tr><th>Option</th><th>Pros</th><th>Cons</th></tr>
             </thead>
             <tbody>
               <tr>
@@ -978,7 +1107,7 @@
               </tr>
             </tbody>
           </table>
-          <p><span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-question"/></svg>Needs Decision</span> Owner: DevOps lead &mdash; Deadline: 2026-05-20</p>
+          <p style="margin-top:0.85rem"><span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-question"/></svg>Needs Decision</span> Owner: DevOps lead · Deadline: 2026-05-20</p>
         </div>
       </section>
 
@@ -987,6 +1116,7 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-clock"/></svg>
           <h2>Timeline</h2>
+          <span class="section-count">Section 08</span>
         </div>
         {{TIMELINE_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
@@ -997,7 +1127,7 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Core infrastructure and auth completed.</p>
             <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
           </div>
-          <div class="timeline__item done">
+          <div class="timeline__item in-progress">
             <h3>Phase 2 — Integration</h3>
             <p>2026-04-01 → 2026-05-20</p>
             <p>Sed do eiusmod tempor incididunt ut labore. API and front-end integration underway.</p>
@@ -1023,6 +1153,7 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-arrow"/></svg>
           <h2>Next Steps</h2>
+          <span class="section-count">Section 09</span>
         </div>
         {{NEXT_STEPS_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
@@ -1030,31 +1161,31 @@
           <li>
             <div class="step-content">
               <div class="step-title">Resolve caching layer decision</div>
-              <div class="step-meta">Owner: Arch team &mdash; By: 2026-05-15 &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+              <div class="step-meta">Owner: Arch team · By: 2026-05-15 · Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
             </div>
           </li>
           <li>
             <div class="step-content">
               <div class="step-title">Follow up with Acme Corp on API credentials</div>
-              <div class="step-meta">Owner: Frank &mdash; By: 2026-05-12 &mdash; Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+              <div class="step-meta">Owner: Frank · By: 2026-05-12 · Sed do eiusmod tempor incididunt ut labore et dolore.</div>
             </div>
           </li>
           <li>
             <div class="step-content">
               <div class="step-title">Complete front-end dashboard integration</div>
-              <div class="step-meta">Owner: Eve &mdash; By: 2026-05-20 &mdash; Duis aute irure dolor in reprehenderit in voluptate velit.</div>
+              <div class="step-meta">Owner: Eve · By: 2026-05-20 · Duis aute irure dolor in reprehenderit in voluptate velit.</div>
             </div>
           </li>
           <li>
             <div class="step-content">
               <div class="step-title">Kick off UAT with pilot users</div>
-              <div class="step-meta">Owner: Grace &mdash; By: 2026-05-25 &mdash; Ut enim ad minim veniam, quis nostrud exercitation ullamco.</div>
+              <div class="step-meta">Owner: Grace · By: 2026-05-25 · Ut enim ad minim veniam, quis nostrud exercitation ullamco.</div>
             </div>
           </li>
           <li>
             <div class="step-content">
               <div class="step-title">Prepare launch runbook and rollback plan</div>
-              <div class="step-meta">Owner: DevOps lead &mdash; By: 2026-06-01 &mdash; Excepteur sint occaecat cupidatat non proident sunt in culpa.</div>
+              <div class="step-meta">Owner: DevOps lead · By: 2026-06-01 · Excepteur sint occaecat cupidatat non proident sunt in culpa.</div>
             </div>
           </li>
         </ol>
@@ -1065,6 +1196,7 @@
         <div class="section-header">
           <svg aria-hidden="true"><use href="#i-question"/></svg>
           <h2>Glossary</h2>
+          <span class="section-count">Section 10</span>
         </div>
         {{GLOSSARY_BLOCK}}
         <!-- PLACEHOLDER LOREM -->
@@ -1072,7 +1204,7 @@
           <dl>
             <dt>API</dt>
             <dd>Application Programming Interface. A contract that allows services to communicate. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
-            <dt>Blue-green deployment</dt>
+            <dt>Blue-green</dt>
             <dd>A release strategy using two identical production environments to minimize downtime. Sed do eiusmod tempor incididunt ut labore et dolore magna.</dd>
             <dt>ACID</dt>
             <dd>Atomicity, Consistency, Isolation, Durability. Properties that guarantee database transactions are processed reliably.</dd>
@@ -1091,7 +1223,7 @@
 
   <footer>
     <div class="container">
-      <p>Generated by explica &mdash; self-contained, offline-readable, printable.</p>
+      <p><strong>Explica</strong> &middot; Self-contained &middot; Offline-readable &middot; Printable &middot; Generated with no external resources.</p>
     </div>
   </footer>
 

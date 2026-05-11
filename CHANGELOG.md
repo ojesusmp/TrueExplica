@@ -4,6 +4,22 @@ All notable changes to the `explica` skill are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2026-05-10
+
+### Changed
+- Redesigned `templates/base.html` with the "Ink & Ochre Editorial" palette — warm cream surface, deep navy ink, saffron accent. Replaces the prior gray-on-white look with WCAG-AA contrast in both light and dark modes.
+- Section headers now carry an auto-numbered `01·` prefix and a thin accent rule.
+- Status pills use real saturated semantic fills (green / blue / violet / red) with white text. The `.pill--inferred` amber badge keeps a dashed border + italic for unmistakable "unconfirmed" signal.
+- Progress bars: gradient saffron fill with shimmer highlight; percentage value rendered in accent color.
+- Timeline: 3px gradient saffron rail with color-coded status dots; in-progress dot pulses.
+- Decisions matrix: dark navy header row, zebra rows, accent left border on first column, hover row highlight.
+- Glossary: tinted left-column with saffron right rule for the term column.
+- Print mode: full color → black-on-white override so paper output stays readable.
+
+### Notes
+- No change to schema, trigger phrases, section IDs, CSS class contract, or SVG symbol IDs. Existing skill outputs continue to render correctly.
+- File size went from ~36 KB to ~45 KB — still inside the 8–500 KB validation window.
+
 ## [1.0.1] - 2026-05-10
 
 ### Changed
