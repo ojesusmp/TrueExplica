@@ -4,6 +4,21 @@ All notable changes to the `explica` skill are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2026-05-10
+
+### Added
+- Two themed template variants: `templates/base-light.html` (forced light) and `templates/base-dark.html` (forced dark). Each works regardless of the reader's OS color-scheme preference.
+- `--theme light|dark` CLI flag in `argument-hint`.
+- Skill now asks the user for a theme at invocation when no `--theme` flag is provided. If running non-interactively, falls back to `templates/base.html` which still auto-switches based on the reader's OS.
+
+### Changed
+- `SKILL.md` Generation step 1 now resolves the theme choice before reading any template file.
+- `SKILL.md` Customization section now lists all three template paths.
+
+### Notes
+- `templates/base.html` is kept as the auto-switching fallback. No template files were removed.
+- No change to schema, trigger phrases, section IDs, CSS class contract, or SVG symbol IDs.
+
 ## [1.0.3] - 2026-05-10
 
 ### Changed

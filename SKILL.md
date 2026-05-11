@@ -2,7 +2,7 @@
 name: explica
 description: "Generate a self-contained graphical HTML+CSS guide explaining the current state of any prompt, project, program, or decision-point at an 18-year-old reading level. Output is one HTML file with inline CSS and SVG, no external dependencies, no JavaScript libraries. Sections: Overview, Where We Are, What's Done, In Progress, Waiting On, Decisions Made, Decisions Pending, Timeline, Next Steps, Glossary. Trigger phrases - 'explica', '/explica', 'visual project status', 'document where we are', 'explain where we are'."
 license: MIT
-argument-hint: "[topic] [--out <dir>] [--audience <level>]"
+argument-hint: "[topic] [--out <dir>] [--audience <level>] [--theme light|dark]"
 ---
 
 # explica
@@ -114,7 +114,16 @@ glossary[]      {term, plain_definition}
 
 ## Generation steps
 
-1. Read the template at `templates/base.html` (relative to the skill directory).
+1. **Resolve theme.** The output ships in one of two visual themes:
+   - `light` — warm light surface with blue accents (`templates/base-light.html`)
+   - `dark` — deep slate canvas with indigo accents (`templates/base-dark.html`)
+
+   Decision order:
+   1. If `--theme light` or `--theme dark` was passed, use it without asking.
+   2. Otherwise ask the user a single consolidated question: *"Light or dark theme for this guide?"* with both options shown. Wait for an answer before generating.
+   3. If neither theme is available in the conversation and the run is non-interactive, fall back to `templates/base.html` (auto-switches based on the reader's OS preference).
+
+   Read the resolved template file.
 2. For each schema field, render the corresponding section block into the template placeholder. Hide any section whose array is empty by setting `style="display:none"` on its `<section>` element.
    - **When rendering `inferred_*` arrays, every item element MUST carry `class="pill--inferred"` (or contain a `span.pill--inferred` sibling) so the unconfirmed-state styling activates.**
 3. Slug the topic: lowercase → replace non-alphanumeric with `-` → collapse consecutive hyphens → trim leading/trailing hyphens.
@@ -180,7 +189,10 @@ User answers → Claude writes the file.
 
 ## Customization
 
-To change colors, open `templates/base.html` and edit the CSS custom properties in the `:root` block (light theme) and the `@media (prefers-color-scheme: dark)` block (dark theme):
+To change colors, open the relevant template file and edit the CSS custom properties in the `:root` block:
+- `templates/base-light.html` — light theme defaults
+- `templates/base-dark.html` — dark theme defaults
+- `templates/base.html` — auto-switching fallback (uses both palettes)
 
 ```css
 :root {

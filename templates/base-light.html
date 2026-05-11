@@ -1,0 +1,1251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{TITLE}}</title>
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════
+       EXPLICA — MIDNIGHT SLATE EDITORIAL
+       Dark-first project status report.
+       Deep slate canvas, white ink, indigo/violet accents.
+       Self-contained: no JS, no external resources, no web fonts.
+       ═══════════════════════════════════════════════════════════════════ */
+
+    /* ── PALETTE: DARK (DEFAULT) ── */
+    :root {
+      color-scheme: light;
+
+        --bg:           #e9eef6;
+        --page-bg:      #ffffff;
+        --surface:      #f8fafc;
+        --surface-alt:  #eef2f7;
+        --card-bg:      #ffffff;
+        --card-bg-deep: #f1f5f9;
+        --ink:          #0b1428;
+        --ink-soft:     #1f2937;
+        --muted:        #475569;
+        --muted-deep:   #64748b;
+        --rule:         #cbd5e1;
+        --border:       #cbd5e1;
+        --border-soft:  #e2e8f0;
+        --accent:       #2563eb;
+        --accent-hot:   #1d4ed8;
+        --accent-deep:  #1e3a8a;
+        --hero-grad-1:  #dbeafe;
+        --hero-grad-2:  #eef2f7;
+        --th-bg:        #1e293b;
+        --shadow-sm:    0 1px 0 rgba(15,23,42,0.06);
+        --shadow:       0 4px 14px rgba(15,23,42,0.10);
+        --shadow-card:  0 10px 30px -10px rgba(15,23,42,0.18);
+
+        --pill-done-bg:       #047857;
+        --pill-done-fg:       #ffffff;
+        --pill-inprogress-bg: #1d4ed8;
+        --pill-inprogress-fg: #ffffff;
+        --pill-waiting-bg:    #6d28d9;
+        --pill-waiting-fg:    #ffffff;
+        --pill-blocked-bg:    #b91c1c;
+        --pill-blocked-fg:    #ffffff;
+        --pill-inferred-bg:   #fbbf24;
+        --pill-inferred-fg:   #3f2a00;
+        --pill-inferred-bd:   #92400e;
+
+        --dot-done:       #047857;
+        --dot-inprogress: #1d4ed8;
+        --dot-waiting:    #6d28d9;
+        --dot-blocked:    #b91c1c;
+
+        --progress-track: #e2e8f0;
+        --progress-fill1: #2563eb;
+        --progress-fill2: #6366f1;
+
+        --callout-info-bg:    #eff6ff;
+        --callout-info-bd:    #2563eb;
+        --callout-success-bg: #ecfdf5;
+        --callout-success-bd: #047857;
+        --callout-warning-bg: #fffbeb;
+        --callout-warning-bd: #d97706;
+        --callout-danger-bg:  #fef2f2;
+        --callout-danger-bd:  #b91c1c;
+      }
+
+    /* ── DARK MODE EXPLICIT (default palette confirmed) ── */
+    @media (prefers-color-scheme: dark) {
+      /* base-light.html: forced light theme; no dark overrides applied */
+      :root { color-scheme: light; }
+    }
+
+    /* ── PALETTE: LIGHT (FALLBACK) ── */
+    
+    /* ── RESET ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.55;
+      color: var(--ink);
+      background: var(--bg);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* ── PAGE WRAPPER ── */
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: var(--page-bg);
+      min-height: 100vh;
+      box-shadow: 0 0 60px rgba(0,0,0,0.4);
+    }
+    
+    .container { padding: 0 2rem; }
+
+    /* ═══ HEADER / HERO ═══ */
+    header.masthead {
+      padding: 2.25rem 2rem 0;
+    }
+    .hero {
+      padding: 2rem 2rem 1.75rem;
+      border-radius: 20px;
+      background: linear-gradient(135deg, var(--hero-grad-1) 0%, var(--hero-grad-2) 100%);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .masthead-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent-hot);
+      margin-bottom: 0.85rem;
+    }
+    .masthead-eyebrow::before {
+      content: "";
+      width: 1.75rem; height: 2px;
+      background: var(--accent);
+      display: inline-block;
+    }
+    .masthead h1 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      font-weight: 800;
+      color: #ffffff;
+      margin: 0 0 1rem;
+      max-width: 26ch;
+    }
+        .masthead-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2.25rem;
+      align-items: baseline;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--rule);
+      margin-top: 0.5rem;
+    }
+    .masthead-meta dt {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--accent-hot);
+      margin-bottom: 0.2rem;
+      display: block;
+    }
+    .masthead-meta dd {
+      font-size: 0.95rem;
+      color: var(--ink);
+      font-weight: 500;
+      margin: 0;
+    }
+
+    /* ═══ TOC (sticky horizontal pill nav) ═══ */
+    nav.toc {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--page-bg) 90%, transparent);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 0.85rem 0;
+      margin-top: 1.5rem;
+    }
+    nav.toc .container {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) transparent;
+    }
+    nav.toc .container::-webkit-scrollbar { height: 4px; }
+    nav.toc .container::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+    nav.toc a {
+      flex-shrink: 0;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.45rem 0.95rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: var(--surface);
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    nav.toc a:hover {
+      color: #ffffff;
+      background: var(--accent-deep);
+      border-color: var(--accent);
+    }
+
+    /* ═══ MAIN ═══ */
+    main { padding: 2.5rem 0 4rem; counter-reset: section-counter; }
+    section { margin-bottom: 4rem; scroll-margin-top: 5rem; counter-increment: section-counter; }
+
+    /* ── Section header ── */
+    .section-header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: end;
+      gap: 1.25rem;
+      padding-bottom: 1rem;
+      margin-bottom: 1.75rem;
+      border-bottom: 2px solid var(--rule);
+      position: relative;
+    }
+    .section-header::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: -2px;
+      width: 5rem; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .section-header svg {
+      width: 1.7rem; height: 1.7rem;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+    .section-header h2 {
+      font-size: clamp(1.55rem, 3vw, 2.1rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+        .section-header h2::before {
+      content: counter(section-counter, decimal-leading-zero) " · ";
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 0.7em;
+      letter-spacing: 0.08em;
+      vertical-align: 0.18em;
+      margin-right: 0.15em;
+    }
+    .section-header .section-count {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted-deep);
+      padding-bottom: 0.3rem;
+    }
+
+    /* ═══ CARDS ═══ */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem 1.6rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-card);
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .card h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #ffffff;
+      margin-bottom: 0.55rem;
+      line-height: 1.3;
+    }
+        .card p {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+      margin-bottom: 0.6rem;
+    }
+    .card p:last-child { margin-bottom: 0; }
+
+    /* ═══ PILLS ═══ */
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.32rem 0.75rem 0.32rem 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: 999px;
+      white-space: nowrap;
+      line-height: 1;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+    }
+    .pill svg { width: 0.95rem; height: 0.95rem; }
+
+    .pill--done       { background: var(--pill-done-bg);       color: var(--pill-done-fg); }
+    .pill--in-progress,
+    .pill--inprogress { background: var(--pill-inprogress-bg); color: var(--pill-inprogress-fg); }
+    .pill--waiting    { background: var(--pill-waiting-bg);    color: var(--pill-waiting-fg); }
+    .pill--blocked    { background: var(--pill-blocked-bg);    color: var(--pill-blocked-fg); }
+
+    .pill--inferred {
+      background: var(--pill-inferred-bg);
+      color: var(--pill-inferred-fg);
+      border: 1.5px dashed var(--pill-inferred-bd);
+      font-style: italic;
+      padding-block: 0.26rem;
+    }
+
+    /* ═══ PROGRESS BAR ═══ */
+    .progress {
+      position: relative;
+      height: 12px;
+      background: var(--progress-track);
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.35);
+      margin-top: 0.85rem;
+      border: 1px solid var(--border-soft);
+    }
+    .progress__fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--progress-fill1) 0%, var(--progress-fill2) 100%);
+      position: relative;
+      transition: width 0.6s ease;
+      box-shadow: 0 0 12px color-mix(in srgb, var(--progress-fill1) 50%, transparent);
+    }
+    .progress__fill::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.20), transparent);
+      border-radius: 999px 999px 0 0;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.55rem;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.02em;
+    }
+    .progress-label span:last-child {
+      color: var(--accent-hot);
+      font-weight: 700;
+    }
+
+    /* ═══ STATUS BLOCK (where-we-are featured callout) ═══ */
+    .status-block {
+      background: var(--callout-info-bg);
+      border: 1px solid var(--border);
+      border-left: 6px solid var(--callout-info-bd);
+      border-radius: 14px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+    .status-block::before {
+      content: "NOW";
+      position: absolute;
+      top: 1rem; right: 1.2rem;
+      font-size: 0.62rem;
+      font-weight: 800;
+      letter-spacing: 0.25em;
+      color: var(--accent-hot);
+      background: rgba(96,165,250,0.12);
+      padding: 0.25rem 0.55rem;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+    }
+    .status-block h3 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+        .status-block p {
+      font-size: 0.95rem;
+      color: var(--ink-soft);
+    }
+
+    /* ═══ SUMMARY GRID (overview stats) ═══ */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .summary-stat {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: 4px solid var(--accent);
+      border-radius: 14px;
+      padding: 1.2rem 1.1rem 1rem;
+      position: relative;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+    .summary-stat .stat-number {
+      display: block;
+      font-size: 2.6rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--accent-hot);
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      margin-bottom: 0.4rem;
+    }
+    .summary-stat .stat-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ═══ ITEM LIST ═══ */
+    .item-list { list-style: none; display: flex; flex-direction: column; gap: 0.7rem; }
+    .item-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.95rem;
+      padding: 0.95rem 1.1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--rule);
+      border-radius: 12px;
+      box-shadow: var(--shadow-sm);
+      transition: border-left-color 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .item-list li:hover { transform: translateX(3px); box-shadow: var(--shadow); }
+    .item-list li:has(.pill--done)       { border-left-color: var(--dot-done); }
+    .item-list li:has(.pill--in-progress),
+    .item-list li:has(.pill--inprogress) { border-left-color: var(--dot-inprogress); }
+    .item-list li:has(.pill--waiting)    { border-left-color: var(--dot-waiting); }
+    .item-list li:has(.pill--blocked)    { border-left-color: var(--dot-blocked); }
+    .item-list li:has(.pill--inferred)   { border-left-color: var(--pill-inferred-bg); border-left-style: dashed; }
+
+    .item-list li .pill { flex-shrink: 0; margin-top: 0.18rem; }
+    .item-list li .item-content { flex: 1; min-width: 0; }
+    .item-list li .item-title {
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 1rem;
+      letter-spacing: -0.005em;
+    }
+        .item-list li .item-meta {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.22rem;
+    }
+
+    /* ═══ TIMELINE ═══ */
+    .timeline {
+      position: relative;
+      padding: 0.5rem 0 0.5rem 2.75rem;
+      margin: 1rem 0;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 1rem;
+      top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 50%, var(--rule) 100%);
+      border-radius: 2px;
+    }
+    .timeline__item {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.15rem 1.3rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow-sm);
+    }
+    .timeline__item::before {
+      content: "";
+      position: absolute;
+      left: -2.18rem;
+      top: 1.4rem;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 3px solid var(--muted);
+      box-shadow: 0 0 0 3px var(--page-bg);
+      z-index: 1;
+    }
+    .timeline__item.done::before       { border-color: var(--dot-done);       background: var(--dot-done); }
+    .timeline__item.in-progress::before,
+    .timeline__item.inprogress::before { border-color: var(--dot-inprogress); background: var(--dot-inprogress); animation: pulse 2s ease-in-out infinite; }
+    .timeline__item.waiting::before    { border-color: var(--dot-waiting);    background: var(--dot-waiting); }
+    .timeline__item.blocked::before    { border-color: var(--dot-blocked);    background: var(--dot-blocked); }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 3px var(--page-bg), 0 0 0 0 color-mix(in srgb, var(--dot-inprogress) 60%, transparent); }
+      50%      { box-shadow: 0 0 0 3px var(--page-bg), 0 0 0 8px color-mix(in srgb, var(--dot-inprogress) 0%,  transparent); }
+    }
+
+    .timeline__item h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.3rem;
+      letter-spacing: -0.01em;
+    }
+        .timeline__item p {
+      font-size: 0.9rem;
+      color: var(--ink-soft);
+      margin-bottom: 0.45rem;
+    }
+    .timeline__item p:first-of-type {
+      font-family: ui-monospace, "SF Mono", "Cascadia Mono", Consolas, monospace;
+      font-size: 0.78rem;
+      color: var(--accent-hot);
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      margin-bottom: 0.55rem;
+    }
+    .timeline__item .pill { margin-top: 0.25rem; }
+
+    /* ═══ MATRIX (decisions-pending table) ═══ */
+    .matrix {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.5rem 0;
+      font-size: 0.92rem;
+      background: var(--page-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .matrix caption {
+      caption-side: top;
+      text-align: left;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-hot);
+      padding-bottom: 0.7rem;
+    }
+    .matrix th {
+      background: var(--th-bg);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 0.85rem 1rem;
+      text-align: left;
+    }
+    .matrix td {
+      padding: 0.9rem 1rem;
+      border-top: 1px solid var(--border-soft);
+      color: var(--ink-soft);
+      vertical-align: top;
+      background: var(--card-bg);
+    }
+    .matrix tbody tr:nth-child(even) td { background: var(--surface-alt); }
+    .matrix tr:hover td {
+      background: color-mix(in srgb, var(--accent) 18%, var(--card-bg));
+      color: #ffffff;
+    }
+    .matrix td strong {
+      color: #ffffff;
+      font-weight: 700;
+      letter-spacing: -0.005em;
+    }
+        .matrix td:first-child {
+      border-left: 4px solid var(--accent);
+    }
+
+    /* ═══ NEXT STEPS ═══ */
+    .next-steps-list {
+      counter-reset: step-counter;
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .next-steps-list li {
+      counter-increment: step-counter;
+      display: grid;
+      grid-template-columns: 2.75rem 1fr;
+      gap: 1.1rem;
+      align-items: start;
+      padding: 1rem 1.2rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .next-steps-list li:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow);
+      border-color: var(--accent);
+    }
+    .next-steps-list li::before {
+      content: counter(step-counter, decimal-leading-zero);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-deep) 0%, var(--accent-hot) 100%);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+      box-shadow: 0 2px 10px rgba(96,165,250,0.30);
+    }
+    .next-steps-list .step-content { padding-top: 0.25rem; min-width: 0; }
+    .next-steps-list .step-title {
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: #ffffff;
+      letter-spacing: -0.005em;
+    }
+        .next-steps-list .step-meta {
+      font-size: 0.86rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ═══ GLOSSARY ═══ */
+    .glossary {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    .glossary dl {
+      display: grid;
+      grid-template-columns: minmax(8rem, 26%) 1fr;
+      gap: 0;
+    }
+    .glossary dt {
+      font-weight: 800;
+      color: #ffffff;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 1rem 1rem 1rem 1.3rem;
+      border-bottom: 1px solid var(--border-soft);
+      border-right: 4px solid var(--accent);
+      background: var(--card-bg-deep);
+      align-self: stretch;
+      display: flex;
+      align-items: flex-start;
+    }
+        .glossary dd {
+      color: var(--ink-soft);
+      font-size: 0.93rem;
+      line-height: 1.55;
+      padding: 1rem 1.3rem;
+      border-bottom: 1px solid var(--border-soft);
+      margin: 0;
+    }
+    .glossary dl > dt:last-of-type,
+    .glossary dl > dd:last-of-type { border-bottom: none; }
+
+    /* ═══ FOOTER ═══ */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2rem 0 2.5rem;
+      margin-top: 2rem;
+      position: relative;
+    }
+    footer::before {
+      content: "";
+      position: absolute;
+      top: -3px; left: 0;
+      width: 6rem; height: 5px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    footer p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+    footer p strong {
+      color: var(--accent-hot);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    /* ═══ RESPONSIVE ═══ */
+    @media (max-width: 720px) {
+      .container { padding: 0 1.25rem; }
+      header.masthead { padding: 1.5rem 1.25rem 0; }
+      .hero { padding: 1.5rem 1.25rem 1.25rem; border-radius: 16px; }
+      .section-header { grid-template-columns: auto 1fr; gap: 0.8rem; }
+      .section-header .section-count { display: none; }
+      .glossary dl { grid-template-columns: 1fr; }
+      .glossary dt { border-right: none; border-bottom: none; padding-bottom: 0.4rem; }
+      .glossary dd { padding-top: 0; }
+      .matrix { display: block; overflow-x: auto; }
+      .timeline { padding-left: 2.25rem; }
+      .timeline::before { left: 0.75rem; }
+      .timeline__item::before { left: -2.05rem; }
+    }
+
+    /* ═══ PRINT ═══ */
+    @media print {
+      :root {
+        --bg: #ffffff;
+        --page-bg: #ffffff;
+        --surface: #ffffff;
+        --surface-alt: #f5f5f5;
+        --card-bg: #ffffff;
+        --card-bg-deep: #f5f5f5;
+        --ink: #000000;
+        --ink-soft: #1a1a1a;
+        --muted: #444444;
+        --muted-deep: #666666;
+        --rule: #cccccc;
+        --border: #888888;
+        --border-soft: #cccccc;
+        --accent: #000000;
+        --accent-hot: #000000;
+        --accent-deep: #000000;
+        --th-bg: #000000;
+        --hero-grad-1: #ffffff;
+        --hero-grad-2: #ffffff;
+      }
+      nav.toc, .no-print { display: none !important; }
+      body, .page {
+        background: #fff !important;
+        color: #000 !important;
+        font-size: 10.5pt;
+        line-height: 1.4;
+        box-shadow: none !important;
+      }
+      a { color: #000 !important; text-decoration: none; }
+      .hero, .card, .status-block, .timeline__item, .next-steps-list li, .summary-stat {
+        background: #fff !important;
+        border: 1px solid #888 !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+      }
+      .glossary, .matrix { background: #fff !important; border: 1px solid #888 !important; box-shadow: none !important; }
+      .glossary dt { background: #f5f5f5 !important; color: #000 !important; border-right: 2px solid #000 !important; }
+      .pill {
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+      }
+      .pill--inferred { border: 1.5px dashed #000 !important; font-style: italic; }
+      .progress { border: 1px solid #888 !important; background: #fff !important; }
+      .progress__fill { background: #444 !important; box-shadow: none !important; }
+      .matrix th { background: #000 !important; color: #fff !important; }
+      .matrix td:first-child { border-left: 2px solid #000 !important; }
+      .section-header { border-bottom: 2px solid #000 !important; }
+      .section-header::after { background: #000 !important; }
+      .next-steps-list li::before { background: #000 !important; color: #fff !important; box-shadow: none !important; }
+      .status-block { border-left: 4px solid #000 !important; }
+      .status-block::before { color: #000 !important; border-color: #000 !important; background: #fff !important; }
+      .timeline::before { background: #000 !important; }
+      .timeline__item::before { background: #000 !important; border-color: #000 !important; box-shadow: 0 0 0 2px #fff !important; }
+      .masthead h1, .section-header h2, .card h3, .status-block h3, .timeline__item h3,
+      .item-list li .item-title, .next-steps-list .step-title, .glossary dt { color: #000 !important; }
+      h1, h2, h3 { page-break-after: avoid; }
+      section { page-break-inside: avoid; }
+      footer { page-break-before: always; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- SVG sprite -->
+  <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="9 12 11 14 15 10"/>
+      </symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <polyline points="12 6 12 12 16 14"/>
+      </symbol>
+      <symbol id="i-question" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </symbol>
+      <symbol id="i-warning" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- ═══ HEADER / HERO ═══ -->
+  <header class="masthead">
+    <div class="hero">
+      <div class="masthead-eyebrow">Project Status &middot; Editorial Brief</div>
+      <h1>{{TITLE}}</h1>
+      <dl class="masthead-meta">
+        <div>
+          <dt>Generated</dt>
+          <dd>{{GENERATED_AT}}</dd>
+        </div>
+        <div>
+          <dt>Audience</dt>
+          <dd>{{AUDIENCE}}</dd>
+        </div>
+        <div>
+          <dt>Format</dt>
+          <dd>Self-contained &middot; Offline-readable</dd>
+        </div>
+      </dl>
+    </div>
+  </header>
+
+  <!-- ═══ TABLE OF CONTENTS ═══ -->
+  <nav class="toc" aria-label="Table of contents">
+    <div class="container">
+      <a href="#overview">01 · Overview</a>
+      <a href="#where-we-are">02 · Where We Are</a>
+      <a href="#done">03 · Done</a>
+      <a href="#in-progress">04 · In Progress</a>
+      <a href="#waiting-on">05 · Waiting On</a>
+      <a href="#decisions-made">06 · Decisions Made</a>
+      <a href="#decisions-pending">07 · Decisions Pending</a>
+      <a href="#timeline">08 · Timeline</a>
+      <a href="#next-steps">09 · Next Steps</a>
+      <a href="#glossary">10 · Glossary</a>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN ═══ -->
+  <main>
+    <div class="container">
+
+      <!-- 1. OVERVIEW -->
+      <section id="overview">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-check"/></svg>
+          <h2>Overview</h2>
+          <span class="section-count">Section 01</span>
+        </div>
+        {{OVERVIEW_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="summary-grid">
+          <div class="summary-stat">
+            <span class="stat-number">12</span>
+            <span class="stat-label">Total Items</span>
+          </div>
+          <div class="summary-stat">
+            <span class="stat-number">7</span>
+            <span class="stat-label">Completed</span>
+          </div>
+          <div class="summary-stat">
+            <span class="stat-number">3</span>
+            <span class="stat-label">In Progress</span>
+          </div>
+          <div class="summary-stat">
+            <span class="stat-number">2</span>
+            <span class="stat-label">Blocked</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Project Alpha — Q2 Status Brief</h3>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation.</p>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+        </div>
+      </section>
+
+      <!-- 2. WHERE WE ARE -->
+      <section id="where-we-are">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-clock"/></svg>
+          <h2>Where We Are</h2>
+          <span class="section-count">Section 02</span>
+        </div>
+        {{WHERE_WE_ARE_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="status-block">
+          <h3>Current Phase: Beta Integration</h3>
+          <p>The team is currently integrating the data pipeline with the front-end dashboard. Core APIs are stable; UI review is ongoing.</p>
+        </div>
+        <div class="card">
+          <h3>Overall Progress</h3>
+          <div class="progress"><div class="progress__fill" style="width:58%"></div></div>
+          <div class="progress-label"><span>Phase 2 of 4</span><span>58% complete</span></div>
+          <p style="margin-top:0.95rem">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+        </div>
+        <div class="card">
+          <h3>Key Risks</h3>
+          <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+          <span class="pill pill--blocked"><svg aria-hidden="true"><use href="#i-warning"/></svg>Blocked: Vendor API</span>
+        </div>
+      </section>
+
+      <!-- 3. DONE -->
+      <section id="done">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-check"/></svg>
+          <h2>Done</h2>
+          <span class="section-count">Section 03</span>
+        </div>
+        {{DONE_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <ul class="item-list">
+          <li>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+            <div class="item-content">
+              <div class="item-title">Authentication service redesign</div>
+              <div class="item-meta">Completed 2026-04-15 · Owner: Alice · Lorem ipsum dolor sit amet, consectetur adipiscing.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+            <div class="item-content">
+              <div class="item-title">Database schema migration v2</div>
+              <div class="item-meta">Completed 2026-04-22 · Owner: Bob · Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+            <div class="item-content">
+              <div class="item-title">CI/CD pipeline configuration</div>
+              <div class="item-meta">Completed 2026-05-01 · Owner: Carol · Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+            <div class="item-content">
+              <div class="item-title">Stakeholder requirements sign-off</div>
+              <div class="item-meta">Completed 2026-05-03 · Owner: David · Excepteur sint occaecat cupidatat non proident sunt in culpa.</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 4. IN PROGRESS -->
+      <section id="in-progress">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-clock"/></svg>
+          <h2>In Progress</h2>
+          <span class="section-count">Section 04</span>
+        </div>
+        {{IN_PROGRESS_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
+            <h3>Front-end dashboard integration</h3>
+            <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
+          </div>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Owner: Eve · Due: 2026-05-20.</p>
+          <div class="progress"><div class="progress__fill" style="width:70%"></div></div>
+          <div class="progress-label"><span>ETA: 2026-05-20</span><span>70%</span></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
+            <h3>API rate limiting implementation</h3>
+            <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
+          </div>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Owner: Frank · Due: 2026-05-18.</p>
+          <div class="progress"><div class="progress__fill" style="width:40%"></div></div>
+          <div class="progress-label"><span>ETA: 2026-05-18</span><span>40%</span></div>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
+            <h3>User acceptance testing</h3>
+            <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
+          </div>
+          <p>Ut enim ad minim veniam, quis nostrud exercitation. Owner: Grace · Due: 2026-05-25.</p>
+          <div class="progress"><div class="progress__fill" style="width:25%"></div></div>
+          <div class="progress-label"><span>ETA: 2026-05-25</span><span>25%</span></div>
+        </div>
+      </section>
+
+      <!-- 5. WAITING ON -->
+      <section id="waiting-on">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-clock"/></svg>
+          <h2>Waiting On</h2>
+          <span class="section-count">Section 05</span>
+        </div>
+        {{WAITING_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <ul class="item-list">
+          <li>
+            <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Waiting</span>
+            <div class="item-content">
+              <div class="item-title">Vendor API credentials</div>
+              <div class="item-meta">Waiting on: Acme Corp · Since: 2026-05-05 · Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Waiting</span>
+            <div class="item-content">
+              <div class="item-title">Legal review of data-sharing agreement</div>
+              <div class="item-meta">Waiting on: Legal team · Since: 2026-05-07 · Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
+            </div>
+          </li>
+          <li>
+            <span class="pill pill--inferred"><svg aria-hidden="true"><use href="#i-question"/></svg>Inferred</span>
+            <div class="item-content">
+              <div class="item-title">Infrastructure provisioning approval</div>
+              <div class="item-meta">Waiting on: IT Ops · Inferred from meeting notes · Nemo enim ipsam voluptatem quia voluptas sit aspernatur.</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- 6. DECISIONS MADE -->
+      <section id="decisions-made">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-check"/></svg>
+          <h2>Decisions Made</h2>
+          <span class="section-count">Section 06</span>
+        </div>
+        {{DECISIONS_MADE_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
+            <h3>Use PostgreSQL for primary data store</h3>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
+          </div>
+          <p>Decided on 2026-04-10 by: CTO, Lead Architect. The team evaluated MySQL, MongoDB, and PostgreSQL. PostgreSQL was selected for its JSON support and ACID compliance.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
+            <h3>Adopt blue-green deployment strategy</h3>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
+          </div>
+          <p>Decided on 2026-04-18 by: DevOps lead. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua, ut enim ad minim veniam.</p>
+        </div>
+        <div class="card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:0.4rem">
+            <h3>Skip MVP mobile app — web-first launch</h3>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Decided</span>
+          </div>
+          <p>Decided on 2026-04-25 by: Product, Engineering. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
+        </div>
+      </section>
+
+      <!-- 7. DECISIONS PENDING -->
+      <section id="decisions-pending">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-question"/></svg>
+          <h2>Decisions Pending</h2>
+          <span class="section-count">Section 07</span>
+        </div>
+        {{DECISIONS_PENDING_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="card">
+          <table class="matrix">
+            <caption>Caching layer selection</caption>
+            <thead>
+              <tr><th>Option</th><th>Pros</th><th>Cons</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Redis</strong></td>
+                <td>In-memory speed, pub/sub, wide adoption</td>
+                <td>Separate service to manage, cost</td>
+              </tr>
+              <tr>
+                <td><strong>Memcached</strong></td>
+                <td>Simpler, very fast for simple KV</td>
+                <td>No persistence, no pub/sub</td>
+              </tr>
+              <tr>
+                <td><strong>In-process cache</strong></td>
+                <td>Zero latency, no infra</td>
+                <td>Not shared across instances, memory pressure</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:0.95rem"><span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-question"/></svg>Needs Decision</span> Owner: Arch team · Deadline: 2026-05-15</p>
+        </div>
+
+        <div class="card">
+          <table class="matrix">
+            <caption>Observability stack</caption>
+            <thead>
+              <tr><th>Option</th><th>Pros</th><th>Cons</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Prometheus + Grafana</strong></td>
+                <td>Open source, flexible, large ecosystem</td>
+                <td>Self-hosted complexity</td>
+              </tr>
+              <tr>
+                <td><strong>Managed SaaS observability</strong></td>
+                <td>Low ops burden, quick setup</td>
+                <td>Vendor lock-in, ongoing cost</td>
+              </tr>
+            </tbody>
+          </table>
+          <p style="margin-top:0.95rem"><span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-question"/></svg>Needs Decision</span> Owner: DevOps lead · Deadline: 2026-05-20</p>
+        </div>
+      </section>
+
+      <!-- 8. TIMELINE -->
+      <section id="timeline">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-clock"/></svg>
+          <h2>Timeline</h2>
+          <span class="section-count">Section 08</span>
+        </div>
+        {{TIMELINE_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="timeline">
+          <div class="timeline__item done">
+            <h3>Phase 1 — Foundation</h3>
+            <p>2026-03-01 → 2026-04-01</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Core infrastructure and auth completed.</p>
+            <span class="pill pill--done"><svg aria-hidden="true"><use href="#i-check"/></svg>Done</span>
+          </div>
+          <div class="timeline__item in-progress">
+            <h3>Phase 2 — Integration</h3>
+            <p>2026-04-01 → 2026-05-20</p>
+            <p>Sed do eiusmod tempor incididunt ut labore. API and front-end integration underway.</p>
+            <span class="pill pill--in-progress"><svg aria-hidden="true"><use href="#i-clock"/></svg>In Progress</span>
+          </div>
+          <div class="timeline__item waiting">
+            <h3>Phase 3 — Testing &amp; Hardening</h3>
+            <p>2026-05-20 → 2026-06-10</p>
+            <p>Duis aute irure dolor in reprehenderit. Load tests, security audit, UAT.</p>
+            <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Waiting</span>
+          </div>
+          <div class="timeline__item">
+            <h3>Phase 4 — Launch</h3>
+            <p>2026-06-15</p>
+            <p>Ut enim ad minim veniam. Production go-live, monitoring ramp-up.</p>
+            <span class="pill pill--waiting"><svg aria-hidden="true"><use href="#i-clock"/></svg>Planned</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. NEXT STEPS -->
+      <section id="next-steps">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-arrow"/></svg>
+          <h2>Next Steps</h2>
+          <span class="section-count">Section 09</span>
+        </div>
+        {{NEXT_STEPS_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <ol class="next-steps-list">
+          <li>
+            <div class="step-content">
+              <div class="step-title">Resolve caching layer decision</div>
+              <div class="step-meta">Owner: Arch team · By: 2026-05-15 · Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-title">Follow up with Acme Corp on API credentials</div>
+              <div class="step-meta">Owner: Frank · By: 2026-05-12 · Sed do eiusmod tempor incididunt ut labore et dolore.</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-title">Complete front-end dashboard integration</div>
+              <div class="step-meta">Owner: Eve · By: 2026-05-20 · Duis aute irure dolor in reprehenderit in voluptate velit.</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-title">Kick off UAT with pilot users</div>
+              <div class="step-meta">Owner: Grace · By: 2026-05-25 · Ut enim ad minim veniam, quis nostrud exercitation ullamco.</div>
+            </div>
+          </li>
+          <li>
+            <div class="step-content">
+              <div class="step-title">Prepare launch runbook and rollback plan</div>
+              <div class="step-meta">Owner: DevOps lead · By: 2026-06-01 · Excepteur sint occaecat cupidatat non proident sunt in culpa.</div>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <!-- 10. GLOSSARY -->
+      <section id="glossary">
+        <div class="section-header">
+          <svg aria-hidden="true"><use href="#i-question"/></svg>
+          <h2>Glossary</h2>
+          <span class="section-count">Section 10</span>
+        </div>
+        {{GLOSSARY_BLOCK}}
+        <!-- PLACEHOLDER LOREM -->
+        <div class="glossary">
+          <dl>
+            <dt>API</dt>
+            <dd>Application Programming Interface. A contract that allows services to communicate. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</dd>
+            <dt>Blue-green</dt>
+            <dd>A release strategy using two identical production environments to minimize downtime. Sed do eiusmod tempor incididunt ut labore et dolore magna.</dd>
+            <dt>ACID</dt>
+            <dd>Atomicity, Consistency, Isolation, Durability. Properties that guarantee database transactions are processed reliably.</dd>
+            <dt>UAT</dt>
+            <dd>User Acceptance Testing. A phase where end users validate the system against requirements. Duis aute irure dolor in reprehenderit.</dd>
+            <dt>CI/CD</dt>
+            <dd>Continuous Integration / Continuous Delivery. Automated pipelines for building, testing, and deploying software.</dd>
+            <dt>MVP</dt>
+            <dd>Minimum Viable Product. The smallest version of a product that delivers value and enables learning. Ut enim ad minim veniam.</dd>
+          </dl>
+        </div>
+      </section>
+
+    </div><!-- /.container -->
+  </main>
+
+  <footer>
+    <div class="container">
+      <p><strong>Explica</strong> &middot; Self-contained &middot; Offline-readable &middot; Printable &middot; Generated with no external resources.</p>
+    </div>
+  </footer>
+
+</div><!-- /.page -->
+</body>
+</html>
